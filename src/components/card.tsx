@@ -1,24 +1,29 @@
-import styled from 'styled-components'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
+import { BsCartPlus } from 'react-icons/bs'
+import styled from 'styled-components'
+import { Button } from './button'
 
 interface CardProps {
   product: Product
+  onClick: () => void
 }
 
-export const Card = ({ product }: CardProps) => {
+const formatTitle = (brand: string, model: string) => {
+  const brandInModel = model.toLowerCase().includes(brand.toLowerCase())
+  return brandInModel
+    ? `${model}`
+    : `${brand[0].toUpperCase() + brand.substring(1)} ${model}`
+}
+
+export const Card = ({ product, onClick }: CardProps) => {
   const maxDescriptionLength =
     product.description.length > 100
       ? `${product.description.substring(0, 100)}`
       : product.description
 
-  const maxTitleLength =
-    product.title.length > 50
-      ? `${product.title.substring(0, 50)}`
-      : product.title
-
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       <ImageWrapper>
         <Image
           src={product.image}
@@ -27,9 +32,17 @@ export const Card = ({ product }: CardProps) => {
           alt="imagem"
         />
       </ImageWrapper>
-      <Title>{maxTitleLength}...</Title>
+      <Title>{formatTitle(product.brand, product.model)}</Title>
       <Description>{maxDescriptionLength}...</Description>
-      <Price>{`$${product.price}`}</Price>
+      <CardFooter>
+        <Price>{`$${product.price}`}</Price>
+        <Button
+          content={<BsCartPlus />}
+          onClick={() => {
+            console.log('Add to cart')
+          }}
+        />
+      </CardFooter>
     </CardContainer>
   )
 }
@@ -50,6 +63,7 @@ const CardContainer = styled.div`
 
 const ImageWrapper = styled.div`
   position: relative;
+  justify-content: center;
   width: 150px;
   height: 150px;
   border-radius: 10px;
@@ -71,5 +85,11 @@ const Description = styled.p`
 const Price = styled.p`
   font-size: 1.25rem;
   font-weight: bold;
-  color: #27ae60;
+  color: #050505;
+`
+
+const CardFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
