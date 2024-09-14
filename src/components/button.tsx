@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 interface ButtonProps {
   content: string | ReactNode
-  onClick: () => void
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
   style?: React.CSSProperties
