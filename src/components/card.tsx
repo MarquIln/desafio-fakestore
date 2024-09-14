@@ -1,26 +1,33 @@
+import { useCartStore } from '@/context/cart-store'
+import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
-import { BsCartPlus } from 'react-icons/bs'
 import styled from 'styled-components'
 import { Button } from './button'
+import { BsCart } from 'react-icons/bs'
 
 interface CardProps {
   product: Product
   onClick: () => void
 }
 
-const formatTitle = (brand: string, model: string) => {
-  const brandInModel = model.toLowerCase().includes(brand.toLowerCase())
-  return brandInModel
-    ? `${model}`
-    : `${brand[0].toUpperCase() + brand.substring(1)} ${model}`
-}
-
 export const Card = ({ product, onClick }: CardProps) => {
+  const { addToCart } = useCartStore((state) => ({
+    addToCart: state.addToCart,
+  }))
+
   const maxDescriptionLength =
     product.description.length > 100
       ? `${product.description.substring(0, 100)}`
       : product.description
+
+  const formattedTitle = useFormatTitle(product.brand, product.model)
+
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+    e.stopPropagation()
+    addToCart(product)
+    alert(`${product.title} adicionado ao carrinho!`)
+  }
 
   return (
     <CardContainer onClick={onClick}>
@@ -32,15 +39,13 @@ export const Card = ({ product, onClick }: CardProps) => {
           alt="imagem"
         />
       </ImageWrapper>
-      <Title>{formatTitle(product.brand, product.model)}</Title>
+      <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>
       <CardFooter>
         <Price>{`$${product.price}`}</Price>
         <Button
-          content={<BsCartPlus />}
-          onClick={() => {
-            console.log('Add to cart')
-          }}
+          onClick={(event) => handleAddToCart(event, product)}
+          content={<BsCart />}
         />
       </CardFooter>
     </CardContainer>
@@ -56,6 +61,7 @@ const CardContainer = styled.div`
   max-height: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: space-between;
   margin: 10px;
