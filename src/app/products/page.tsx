@@ -44,11 +44,12 @@ export default function ProductsPage() {
       <ProductGrid>
         {products.length > 0 &&
           products.map((product) => (
-            <Card
-              key={product.id}
-              product={product}
-              onClick={() => goToProductPage(product.id)}
-            />
+            <ProductCard key={product.id}>
+              <Card
+                product={product}
+                onClick={() => goToProductPage(product.id)}
+              />
+            </ProductCard>
           ))}
       </ProductGrid>
       <Pagination>
@@ -85,4 +86,8 @@ const PageIndicator = styled.span`
   border: 1px solid white;
   border-radius: 10%;
   padding: 10px;
+`
+
+const ProductCard = styled.div`
+  position: relative;
 `

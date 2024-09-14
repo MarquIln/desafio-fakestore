@@ -1,55 +1,95 @@
 'use client'
 
-import { Product } from '@/types/product'
-import Image from 'next/image'
+import { useProductStore } from '@/context/products-store'
+import { useFormatTitle } from '@/hooks/use-format-title'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { FaArrowCircleLeft } from 'react-icons/fa'
+import { useState, useEffect } from 'react'
+import { FaArrowCircleLeft, FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
+import Image from 'next/image'
+import { useCartStore } from '@/context/cart-store'
+import type { Product } from '@/types/product'
 
-export default function ProductPage() {
-  const [product] = useState<Product | null>({
-    id: 1,
-    title: 'Product 1',
-    description: 'Description of product 1',
-    price: 100,
-    image: '/images/product1.jpg',
-    brand: 'Brand 1',
-    model: 'Model 1',
-  })
+const ProductPage = ({ params }: { params: { id: string } }) => {
+  const { product, fetchProductById } = useProductStore((state) => ({
+    product: state.product,
+    fetchProductById: state.fetchProductById,
+  }))
+  const { addToCart } = useCartStore((state) => ({
+    addToCart: state.addToCart,
+  }))
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(product)
+    alert(`${product.title} adicionado ao carrinho!`)
+  }
+
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
+
+  const formattedTitle = useFormatTitle(
+    product?.brand || '',
+    product?.model || '',
+  )
+
+  useEffect(() => {
+    const id = parseInt(params.id)
+    if (!isNaN(id)) {
+      setLoading(true)
+      console.log(id)
+      fetchProductById(id).finally(() => setLoading(false))
+    }
+  }, [params.id, fetchProductById])
 
   const handleBack = () => {
     router.back()
   }
 
   return (
-    <div>
+    <Main>
       <BackButton onClick={handleBack}>
-        <FaArrowCircleLeft />
+        <FaArrowCircleLeft /> Voltar
       </BackButton>
-      {product ? (
-        <ProductContainer>
+      {loading ? (
+        <LoadingIndicator>Carregando...</LoadingIndicator>
+      ) : product ? (
+        <ProductWrapper>
           <ImageWrapper>
             <Image
               src={product.image}
               alt={product.title}
-              width={300}
-              height={300}
+              width={600}
+              height={600}
+              objectFit="contain"
             />
           </ImageWrapper>
-          <Details>
-            <Title>{product.title}</Title>
-            <Description>{product.description}</Description>
-            <Price>{`$${product.price}`}</Price>
-          </Details>
-        </ProductContainer>
+          <ProductDetails>
+            <Details>
+              <Title>{formattedTitle}</Title>
+              <div style={{ color: 'black' }}>Descrição</div>
+              <Description>{product.description}</Description>
+              <ButtonContainer>
+                <Price>{`R$ ${product.price}`}</Price>
+                <AddToCartButton onClick={() => handleAddToCart(product)}>
+                  <FaShoppingCart /> Adicionar ao Carrinho
+                </AddToCartButton>
+              </ButtonContainer>
+            </Details>
+          </ProductDetails>
+        </ProductWrapper>
       ) : (
-        <p>Loading...</p>
+        <ErrorMessage>Produto não encontrado.</ErrorMessage>
       )}
-    </div>
+    </Main>
   )
 }
+
+export default ProductPage
+
+const Main = styled.div`
+  padding: 20px;
+  margin: 0 auto;
+`
 
 const BackButton = styled.button`
   background: none;
@@ -57,56 +97,121 @@ const BackButton = styled.button`
   cursor: pointer;
   color: #0070f3;
   font-size: 1rem;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 30px;
 
   &:hover {
     text-decoration: underline;
   }
 `
 
-const ProductContainer = styled.div`
+const ProductWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-`
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-start;
 
-const ImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
   }
 `
 
-const Details = styled.div`
-  text-align: center;
+const ProductDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-basis: 50%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+  }
+`
+
+const ImageWrapper = styled.div`
+  flex-basis: 50%;
+  max-width: 600px;
+  max-height: 600px;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    max-width: 100%;
+    max-height: auto;
+  }
 `
 
 const Title = styled.h1`
   font-size: 2rem;
-  margin-bottom: 10px;
+  color: #333;
+  margin-bottom: 15px;
+`
+
+const Price = styled.p`
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #0070f3;
+  margin-bottom: 15px;
 `
 
 const Description = styled.p`
   font-size: 1rem;
+  margin-left: 20px;
   color: #666;
   margin-bottom: 20px;
 `
 
-const Price = styled.p`
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`
+
+const ButtonContainer = styled.div`
+  margin-top: auto;
+  flex-direction: row;
+`
+
+const AddToCartButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #0070f3;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #005bb5;
+  }
+`
+
+const LoadingIndicator = styled.div`
   font-size: 1.5rem;
-  font-weight: bold;
-  color: #050505;
+  color: #0070f3;
+  text-align: center;
+  margin-top: 50px;
+`
+
+const ErrorMessage = styled.div`
+  font-size: 1.2rem;
+  color: red;
+  text-align: center;
+  margin-top: 50px;
 `
