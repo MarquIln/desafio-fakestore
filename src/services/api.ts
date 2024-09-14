@@ -8,8 +8,6 @@ export const fetchProductsByPage = async (page: number) => {
 }
 
 export const fetchProductById = async (id: number) => {
-  const response = await axios
-    .get(`https://fakestoreapi.in/api/products/${id}`)
-    .then((res) => res.data)
+  const response = await axios.get(`https://fakestoreapi.in/api/products/${id}`)
   return response
 }
