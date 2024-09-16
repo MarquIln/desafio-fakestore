@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaArrowCircleLeft, FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
+import { ProductPageSkeleton } from '@/components/product-page-skeleton'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const { product, fetchProductById } = useProductStore((state) => ({
@@ -53,7 +54,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         <FaArrowCircleLeft size={40} />
       </BackButton>
       {loading ? (
-        <LoadingIndicator>Carregando...</LoadingIndicator>
+        <ProductPageSkeleton />
       ) : product ? (
         <Page>
           <ProductWrapper>
@@ -213,13 +214,6 @@ const AddToCartButton = styled.button`
   &:hover {
     background-color: #ce3131;
   }
-`
-
-const LoadingIndicator = styled.div`
-  font-size: 1.5rem;
-  color: #fd3a3a;
-  text-align: center;
-  margin-top: 50px;
 `
 
 const ErrorMessage = styled.div`

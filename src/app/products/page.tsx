@@ -19,7 +19,7 @@ import {
 } from '@/components/pagination'
 import { Card } from '@/components/card'
 import { ProductCard } from '@/components/product-card'
-import { CardSkeleton } from '@/components/card-skeleton'
+import { AllProductsSkeleton } from '@/components/all-products-skeleton'
 
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -184,7 +184,7 @@ export default function AllProductsPage() {
         {isLoading
           ? Array.from({ length: 24 }).map((_, index) => (
               <ProductCard key={index}>
-                <CardSkeleton />
+                <AllProductsSkeleton />
               </ProductCard>
             ))
           : filteredProducts.map((product) => (
