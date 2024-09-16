@@ -26,18 +26,12 @@ export const Card = ({ product, onClick }: CardProps) => {
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.stopPropagation()
     addToCart(product)
-    alert(`${product.title} adicionado ao carrinho!`)
   }
 
   return (
     <CardContainer onClick={onClick}>
       <ImageWrapper>
-        <Image
-          src={product.image}
-          layout="fill"
-          objectFit="cover"
-          alt="imagem"
-        />
+        <Image src={product.image} alt="imagem do produto" fill />
       </ImageWrapper>
       <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>
@@ -58,13 +52,14 @@ const CardContainer = styled.div`
   padding: 16px;
   background-color: #fff;
   max-width: 300px;
-  max-height: 400px;
+  height: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
   margin: 10px;
+  cursor: pointer;
 `
 
 const ImageWrapper = styled.div`

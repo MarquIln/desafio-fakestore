@@ -2,63 +2,101 @@
 
 import { Card } from '@/components/card'
 import { Header } from '@/components/header'
-import { fetchProductsByPage } from '@/services/api'
+import {
+  fetchAllProducts,
+  fetchProductByCategory,
+  fetchProductsByPage,
+} from '@/services/api'
 import type { Product } from '@/types/product'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
 import styled from 'styled-components'
 
-export default function ProductsPage() {
+export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState<number>(1)
+  const [keyword, setKeyword] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const router = useRouter()
 
-  const getAllProductsByPage = (page: number) => {
-    fetchProductsByPage(page).then((response) => setProducts(response))
+  const getProducts = useCallback(async () => {
+    if (selectedCategory) {
+      const response = await fetchProductByCategory(selectedCategory)
+      setProducts(response)
+    } else if (keyword) {
+      const filteredProducts = products.filter((product) =>
+        product.title.toLowerCase().includes(keyword.toLowerCase()),
+      )
+      setProducts(filteredProducts)
+    } else if (page) {
+      const response = await fetchProductsByPage(page)
+      setProducts(response)
+    } else {
+      const response = await fetchAllProducts()
+      setProducts(response)
+    }
+  }, [page, keyword, selectedCategory, products])
+
+  useEffect(() => {
+    getProducts()
+  }, [getProducts])
+
+  const handleKeywordChange = (keyword: string) => {
+    setKeyword(keyword)
+    setPage(1)
+    if (keyword === '') {
+      setSelectedCategory(null)
+    }
+  }
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setKeyword('')
+    setPage(1)
+  }
+
+  const handleNextPage = () => {
+    if (keyword === '' && page) {
+      setPage(page + 1)
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handlePreviousPage = () => {
+    if (keyword === '' && page && page > 1) {
+      setPage(page - 1)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   const goToProductPage = (id: number) => {
     router.push(`/products/${id}`)
   }
 
-  useEffect(() => {
-    getAllProductsByPage(page)
-  }, [page])
-
-  const handleNextPage = () => {
-    setPage((prevPage) => prevPage + 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage((prevPage) => prevPage - 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }
-
   return (
     <div>
-      <Header />
+      <Header
+        onKeywordChange={handleKeywordChange}
+        onCategoryChange={handleCategoryChange}
+      />
       <ProductGrid>
-        {products.length > 0 &&
-          products.map((product) => (
-            <ProductCard key={product.id}>
-              <Card
-                product={product}
-                onClick={() => goToProductPage(product.id)}
-              />
-            </ProductCard>
-          ))}
+        {products?.map((product) => (
+          <ProductCard key={product.id}>
+            <Card
+              product={product}
+              onClick={() => goToProductPage(product.id)}
+            />
+          </ProductCard>
+        ))}
       </ProductGrid>
       <Pagination>
         <button onClick={handlePreviousPage} disabled={page === 1}>
-          <FaArrowCircleLeft />
+          <FaArrowCircleLeft color={'#fd3a3a'} />
         </button>
         <PageIndicator>{page}</PageIndicator>
         <button onClick={handleNextPage}>
-          <FaArrowCircleRight />
+          <FaArrowCircleRight color={'#fd3a3a'} />
         </button>
       </Pagination>
     </div>
@@ -79,13 +117,14 @@ const Pagination = styled.div`
   margin-top: 20px;
   gap: 10px;
 `
+
 const PageIndicator = styled.span`
   font-size: 1rem;
   font-weight: bold;
-  color: white;
-  border: 1px solid white;
+  color: #fd3a3a;
+  border: 1px solid #fd3a3a;
   border-radius: 10%;
-  padding: 10px;
+  padding: 5px;
 `
 
 const ProductCard = styled.div`

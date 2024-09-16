@@ -29,13 +29,13 @@ export const Button = ({
 }
 
 const StyledButton = styled.button`
-  background-color: #4caf50;
+  background-color: #fd3a3a;
   color: white;
   width: 45px;
   height: 45px;
   font-size: 16px;
   cursor: pointer;
   align-content: center;
-  border: 1px solid #4caf50;
+  border: 1px solid #fd3a3a;
   border-radius: 10px;
 `
