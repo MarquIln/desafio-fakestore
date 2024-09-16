@@ -10,7 +10,6 @@ import {
 } from '@/services/api'
 import type { Product } from '@/types/product'
 import { Header } from '@/components/header'
-import { ProductGrid } from '@/components/product-grid'
 import {
   Pagination,
   ChangePageButton,
@@ -18,13 +17,13 @@ import {
   PageIndicator,
 } from '@/components/pagination'
 import { Card } from '@/components/card'
-import { ProductCard } from '@/components/product-card'
+import { ProductCard, ProductGrid } from '@/components/product-card'
 import { AllProductsSkeleton } from '@/components/all-products-skeleton'
 
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [page, setPage] = useState<number>(1)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [keyword, setKeyword] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [scrolling, setScrolling] = useState(false)
@@ -180,14 +179,18 @@ export default function AllProductsPage() {
         onKeywordChange={handleKeywordChange}
         onCategoryChange={handleCategoryChange}
       />
-      <ProductGrid>
-        {isLoading
-          ? Array.from({ length: 24 }).map((_, index) => (
-              <ProductCard key={index}>
-                <AllProductsSkeleton />
-              </ProductCard>
-            ))
-          : filteredProducts.map((product) => (
+      {isLoading ? (
+        <ProductGrid>
+          {Array.from({ length: 24 }).map((_, index) => (
+            <ProductCard key={index}>
+              <AllProductsSkeleton />
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      ) : (
+        <>
+          <ProductGrid>
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id}>
                 <Card
                   product={product}
@@ -195,20 +198,25 @@ export default function AllProductsPage() {
                 />
               </ProductCard>
             ))}
-      </ProductGrid>
-      {!keyword && !selectedCategory && (
-        <Pagination>
-          <ChangePageButton onClick={handlePreviousPage} disabled={page === 1}>
-            <FaArrowCircleLeft color={'#fd3a3a'} />
-          </ChangePageButton>
-          {renderPageNumbers}
-          <ChangePageButton
-            onClick={handleNextPage}
-            disabled={page === totalPages}
-          >
-            <FaArrowCircleRight color={'#fd3a3a'} />
-          </ChangePageButton>
-        </Pagination>
+          </ProductGrid>
+          {!keyword && !selectedCategory && (
+            <Pagination>
+              <ChangePageButton
+                onClick={handlePreviousPage}
+                disabled={page === 1}
+              >
+                <FaArrowCircleLeft color={'#fd3a3a'} />
+              </ChangePageButton>
+              {renderPageNumbers}
+              <ChangePageButton
+                onClick={handleNextPage}
+                disabled={page === totalPages}
+              >
+                <FaArrowCircleRight color={'#fd3a3a'} />
+              </ChangePageButton>
+            </Pagination>
+          )}
+        </>
       )}
     </div>
   )
