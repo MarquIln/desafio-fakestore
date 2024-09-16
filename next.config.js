@@ -6,6 +6,9 @@ const nextConfig = {
   env: {
     API_URL: process.env.BASE_URI,
   },
+  compiler: {
+    styledComponents: true,
+  },
 }
 
-export default nextConfig
+module.exports = nextConfig

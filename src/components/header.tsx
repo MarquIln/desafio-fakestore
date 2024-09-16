@@ -62,7 +62,7 @@ export const Header = ({ onKeywordChange, onCategoryChange }: HeaderProps) => {
         </Cart>
       </StyledHeader>
 
-      <MobileSidebar isOpen={isSidebarOpen}>
+      <MobileSidebar $isOpen={isSidebarOpen}>
         <SidebarContent>
           <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
           <Filter
@@ -143,10 +143,10 @@ const FiltersDesktop = styled.div`
   }
 `
 
-const MobileSidebar = styled.aside<{ isOpen: boolean }>`
+const MobileSidebar = styled.aside<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
-  left: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+  left: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
   height: 100%;
   width: 250px;
   background-color: white;
