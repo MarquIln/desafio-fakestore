@@ -2,24 +2,16 @@ import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
 import { TbTrash } from 'react-icons/tb'
 import styled from 'styled-components'
+import { Button } from './button'
 
 interface CartItemProps {
   product: Product
   onRemove: (id: number) => void
-  onUpdateQuantity: (id: number, quantity: number) => void
 }
 
-export const CartItem = ({
-  product,
-  onRemove,
-  onUpdateQuantity,
-}: CartItemProps) => {
+export const CartItem = ({ product, onRemove }: CartItemProps) => {
   const handleRemove = () => {
     onRemove(product.id)
-  }
-
-  const handleUpdateQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdateQuantity(product.id, Number(e.target.value))
   }
 
   const formattedTitle = useFormatTitle(product.brand, product.model)
@@ -27,21 +19,29 @@ export const CartItem = ({
   return (
     <CartItemContainer>
       <CartItemDetails>
+        <CartItemImage src={product.image} alt={product.title} />
         <CartItemTitle>{formattedTitle}</CartItemTitle>
-        <CartItemPrice>
-          {product.price.toLocaleString('pt-br', {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </CartItemPrice>
       </CartItemDetails>
-      <QuantityInput type="number" onChange={handleUpdateQuantity} />
-      <RemoveButton onClick={handleRemove}>
-        <TbTrash size={20} />
-      </RemoveButton>
+      <CartItemPrice>
+        {product.price.toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'USD',
+        })}
+      </CartItemPrice>
+      <Button
+        onClick={handleRemove}
+        content={<TbTrash size={20} />}
+        style={{ backgroundColor: 'red', border: 'none' }}
+      />
     </CartItemContainer>
   )
 }
+
+const CartItemImage = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+`
 
 const CartItemContainer = styled.div`
   display: flex;
@@ -49,11 +49,14 @@ const CartItemContainer = styled.div`
   align-items: center;
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 0;
+  color: black;
 `
 
 const CartItemDetails = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
 `
 
 const CartItemTitle = styled.h3`
@@ -62,24 +65,5 @@ const CartItemTitle = styled.h3`
 `
 
 const CartItemPrice = styled.p`
-  font-size: 0.8rem;
-  color: #666;
-`
-
-const QuantityInput = styled.input`
-  max-width: 100px;
-  height: 30px;
-  flex: 1;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  text-align: center;
-`
-
-const RemoveButton = styled.button`
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
+  font-size: 1.2rem;
 `
