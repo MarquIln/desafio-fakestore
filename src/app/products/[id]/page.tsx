@@ -1,15 +1,16 @@
 'use client'
 
+import { CategoriesSlider } from '@/components/categories-slider'
 import { Header } from '@/components/header'
 import { LikedProducts } from '@/components/liked-products'
+import { ProductPageSkeleton } from '@/components/product-page-skeleton'
 import { useCartStore } from '@/context/cart-store'
 import { useProductStore } from '@/context/product-store'
 import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { FaArrowCircleLeft, FaShoppingCart } from 'react-icons/fa'
+import { FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
@@ -26,7 +27,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   }
 
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   const formattedTitle = useFormatTitle(
     product?.brand || '',
@@ -42,18 +42,12 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
     }
   }, [params.id, fetchProductById])
 
-  const handleBack = () => {
-    router.back()
-  }
-
   return (
     <>
       <Header />
-      <BackButton onClick={handleBack}>
-        <FaArrowCircleLeft size={40} />
-      </BackButton>
+      <CategoriesSlider />
       {loading ? (
-        <LoadingIndicator>Carregando...</LoadingIndicator>
+        <ProductPageSkeleton />
       ) : product ? (
         <Page>
           <ProductWrapper>
@@ -101,21 +95,6 @@ export default ProductPage
 
 const Page = styled.div`
   padding: 20px;
-`
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `
 
 const ProductWrapper = styled.div`
@@ -213,13 +192,6 @@ const AddToCartButton = styled.button`
   &:hover {
     background-color: #ce3131;
   }
-`
-
-const LoadingIndicator = styled.div`
-  font-size: 1.5rem;
-  color: #fd3a3a;
-  text-align: center;
-  margin-top: 50px;
 `
 
 const ErrorMessage = styled.div`

@@ -36,7 +36,7 @@ export const Card = ({ product, onClick }: CardProps) => {
       <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>
       <CardFooter>
-        <Price>{`$${product.price}`}</Price>
+        <Price>{`$${product.price}.00`}</Price>
         <Button
           onClick={(event) => handleAddToCart(event, product)}
           content={<BsCart />}
