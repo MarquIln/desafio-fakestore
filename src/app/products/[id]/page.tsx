@@ -1,14 +1,16 @@
 'use client'
 
-import { useProductStore } from '@/context/products-store'
+import { Header } from '@/components/header'
+import { LikedProducts } from '@/components/liked-products'
+import { useCartStore } from '@/context/cart-store'
+import { useProductStore } from '@/context/product-store'
 import { useFormatTitle } from '@/hooks/use-format-title'
+import type { Product } from '@/types/product'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FaArrowCircleLeft, FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
-import Image from 'next/image'
-import { useCartStore } from '@/context/cart-store'
-import type { Product } from '@/types/product'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const { product, fetchProductById } = useProductStore((state) => ({
@@ -21,7 +23,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
   const handleAddToCart = (product: Product) => {
     addToCart(product)
-    alert(`${product.title} adicionado ao carrinho!`)
   }
 
   const [loading, setLoading] = useState(true)
@@ -46,61 +47,71 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <Main>
+    <>
+      <Header />
       <BackButton onClick={handleBack}>
-        <FaArrowCircleLeft /> Voltar
+        <FaArrowCircleLeft size={40} />
       </BackButton>
       {loading ? (
         <LoadingIndicator>Carregando...</LoadingIndicator>
       ) : product ? (
-        <ProductWrapper>
-          <ImageWrapper>
-            <Image
-              src={product.image}
-              alt={product.title}
-              width={600}
-              height={600}
-              objectFit="contain"
-            />
-          </ImageWrapper>
-          <ProductDetails>
-            <Details>
-              <Title>{formattedTitle}</Title>
-              <div style={{ color: 'black' }}>Descrição</div>
-              <Description>{product.description}</Description>
-              <ButtonContainer>
-                <Price>{`R$ ${product.price}`}</Price>
-                <AddToCartButton onClick={() => handleAddToCart(product)}>
-                  <FaShoppingCart /> Adicionar ao Carrinho
-                </AddToCartButton>
-              </ButtonContainer>
-            </Details>
-          </ProductDetails>
-        </ProductWrapper>
+        <Page>
+          <ProductWrapper>
+            <ImageWrapper>
+              <Image
+                src={product.image}
+                alt={product.title}
+                width={600}
+                height={600}
+                objectFit="contain"
+              />
+            </ImageWrapper>
+            <ProductDetails>
+              <Details>
+                <Title>{formattedTitle}</Title>
+                <div style={{ color: 'black' }}>Descrição</div>
+                <Description>{product.description}</Description>
+                <Category>
+                  Categoria: <strong>{product.category}</strong>
+                </Category>
+                <ButtonContainer>
+                  <Price>{`$ ${product.price}`}</Price>
+                  <AddToCartButton onClick={() => handleAddToCart(product)}>
+                    <FaShoppingCart /> Adicionar ao Carrinho
+                  </AddToCartButton>
+                </ButtonContainer>
+              </Details>
+            </ProductDetails>
+          </ProductWrapper>
+          <div>
+            <h2 style={{ color: 'black' }}>
+              Produtos que você pode gostar tambem:
+            </h2>
+            <LikedProducts product={product} />
+          </div>
+        </Page>
       ) : (
         <ErrorMessage>Produto não encontrado.</ErrorMessage>
       )}
-    </Main>
+    </>
   )
 }
 
 export default ProductPage
 
-const Main = styled.div`
+const Page = styled.div`
   padding: 20px;
-  margin: 0 auto;
 `
 
 const BackButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: #0070f3;
+  color: white;
   font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 30px;
+  padding: 10px 20px;
 
   &:hover {
     text-decoration: underline;
@@ -110,12 +121,16 @@ const BackButton = styled.button`
 const ProductWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 40px;
-  align-items: flex-start;
+  background-color: white;
+  border: 2px solid #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    justify-content: center;
   }
 `
 
@@ -124,10 +139,9 @@ const ProductDetails = styled.div`
   flex-direction: column;
   gap: 20px;
   flex-basis: 50%;
-  background-color: #f9f9f9;
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     flex-basis: 100%;
@@ -135,14 +149,13 @@ const ProductDetails = styled.div`
 `
 
 const ImageWrapper = styled.div`
-  flex-basis: 50%;
   max-width: 600px;
   max-height: 600px;
 
   img {
     width: 100%;
     height: auto;
-    object-fit: contain;
+    object-fit: fill;
   }
 
   @media (max-width: 768px) {
@@ -161,7 +174,7 @@ const Title = styled.h1`
 const Price = styled.p`
   font-size: 1.8rem;
   font-weight: bold;
-  color: #0070f3;
+  color: #fd3a3a;
   margin-bottom: 15px;
 `
 
@@ -188,7 +201,7 @@ const AddToCartButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: #0070f3;
+  background-color: #fd3a3a;
   color: #fff;
   padding: 12px 24px;
   border: none;
@@ -198,13 +211,13 @@ const AddToCartButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #005bb5;
+    background-color: #ce3131;
   }
 `
 
 const LoadingIndicator = styled.div`
   font-size: 1.5rem;
-  color: #0070f3;
+  color: #fd3a3a;
   text-align: center;
   margin-top: 50px;
 `
@@ -214,4 +227,10 @@ const ErrorMessage = styled.div`
   color: red;
   text-align: center;
   margin-top: 50px;
+`
+
+const Category = styled.div`
+  font-size: 1rem;
+  color: black;
+  margin-top: 20px;
 `
