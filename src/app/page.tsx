@@ -1,12 +1,10 @@
 'use client'
 
 import { useCartStore } from '@/context/cart-store'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import AllProductsPage from './products/page'
 
 export default function Home() {
-  const router = useRouter()
-
   const loadCartFromLocalStorage = useCartStore(
     (state) => state.loadCartFromLocalStorage,
   )
@@ -15,10 +13,5 @@ export default function Home() {
     loadCartFromLocalStorage()
   }, [loadCartFromLocalStorage])
 
-  return (
-    <div>
-      <h1>Home</h1>
-      <button onClick={() => router.push('/products')}>Products</button>
-    </div>
-  )
+  return <AllProductsPage />
 }

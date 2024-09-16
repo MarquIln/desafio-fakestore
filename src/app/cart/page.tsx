@@ -35,11 +35,10 @@ export default function CartPage() {
               key={product.id}
               product={product}
               onRemove={handleRemoveFromCart}
-              onUpdateQuantity={() => console.log('oi')}
             />
           ))
         ) : (
-          <EmptyCartMessage>Seu carrinho está vazio</EmptyCartMessage>
+          <EmptyCartMessage>Seu carrinho está vazio 😭</EmptyCartMessage>
         )}
       </CartWrapper>
     </>
@@ -50,9 +49,11 @@ const CartWrapper = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
+  color: black;
 `
 
 const EmptyCartMessage = styled.p`
   text-align: center;
   font-size: 1.5rem;
+  color: black;
 `
