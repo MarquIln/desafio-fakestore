@@ -10,6 +10,8 @@ interface ProductStore {
   fetchProductById: (id: number) => Promise<void>
   fetchProducts: () => Promise<void>
   searchProductByKeyword: (keyword: string) => void
+  activatedCategory: string | null
+  setActivatedCategory: (categories: string | null) => void
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -42,4 +44,6 @@ export const useProductStore = create<ProductStore>((set) => ({
       return { filteredProducts: filtered }
     })
   },
+  activatedCategory: null,
+  setActivatedCategory: (category) => set({ activatedCategory: category }),
 }))

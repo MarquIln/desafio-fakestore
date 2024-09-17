@@ -1,5 +1,6 @@
 'use client'
 
+import { CategoriesSlider } from '@/components/categories-slider'
 import { Header } from '@/components/header'
 import { PageNumbers } from '@/components/page-numbers'
 import { ChangePageButton, Pagination } from '@/components/pagination'
@@ -35,6 +36,7 @@ export default function AllProductsPage() {
         setProducts(response)
         return
       }
+
       if (keyword) {
         const allProducts = await fetchAllProducts()
         const filteredProducts = allProducts.filter((product: Product) =>
@@ -43,6 +45,7 @@ export default function AllProductsPage() {
         setProducts(filteredProducts)
         return
       }
+
       if (page) {
         const response = await fetchProductsByPage(page)
         setProducts(response)
@@ -101,6 +104,7 @@ export default function AllProductsPage() {
         onKeywordChange={setKeyword}
         onCategoryChange={setSelectedCategory}
       />
+      <CategoriesSlider onCategoryChange={setSelectedCategory} />
       <ProductGrid
         products={products}
         onProductClick={goToProductPage}

@@ -1,16 +1,20 @@
+import { useProductStore } from '@/context/product-store'
 import { fetchAllCategories } from '@/services/api'
 import { useEffect, useState } from 'react'
-import { FaAngleDoubleDown } from 'react-icons/fa'
+import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 
 interface FilterProps {
   onCategoryChange: (category: string) => void
+  isSidebar?: boolean
 }
 
-export const Filter = ({ onCategoryChange }: FilterProps) => {
+export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const { activatedCategory, setActivatedCategory } = useProductStore(
+    (state) => state,
+  )
 
   const getAllCategories = async () => {
     const categories = await fetchAllCategories()
@@ -22,13 +26,13 @@ export const Filter = ({ onCategoryChange }: FilterProps) => {
   }, [])
 
   const handleCategorySelect = (category: string) => {
-    setActiveCategory(category)
+    setActivatedCategory(category)
     onCategoryChange(category)
     setIsOpen(false)
   }
 
   const handleResetFilter = () => {
-    setActiveCategory(null)
+    setActivatedCategory(null)
     onCategoryChange('')
     setIsOpen(false)
   }
@@ -36,11 +40,12 @@ export const Filter = ({ onCategoryChange }: FilterProps) => {
   return (
     <FilterContainer>
       <DropdownButton
-        active={!!activeCategory}
+        active={!!activatedCategory}
         onClick={() => setIsOpen(!isOpen)}
+        isSidebar={isSidebar}
       >
-        Filtros
-        <FaAngleDoubleDown style={{ marginLeft: '8px' }} />
+        {isSidebar && <span>Filtros</span>}{' '}
+        <FaFilter style={{ marginLeft: isSidebar ? '8px' : '0' }} />
       </DropdownButton>
 
       <DropdownContent open={isOpen}>
@@ -65,7 +70,7 @@ const FilterContainer = styled.div`
   display: inline-block;
 `
 
-const DropdownButton = styled.button<{ active: boolean }>`
+const DropdownButton = styled.button<{ active: boolean; isSidebar?: boolean }>`
   background-color: ${(props) => (props.active ? '#fd3a3a' : 'white')};
   border: none;
   padding: 10px;
@@ -75,6 +80,17 @@ const DropdownButton = styled.button<{ active: boolean }>`
   color: ${(props) => (props.active ? 'white' : 'black')};
   display: flex;
   align-items: center;
+
+  /* No computador, esconda o texto e mostre apenas o ícone */
+  ${(props) =>
+    !props.isSidebar &&
+    `
+    @media (min-width: 600px) {
+      span {
+        display: none;
+      }
+    }
+  `}
 `
 
 const DropdownContent = styled.div<{ open: boolean }>`
