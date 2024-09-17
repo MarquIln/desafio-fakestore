@@ -47,7 +47,11 @@ export default function CartPage() {
                 <strong>Total de produtos:</strong> {totalItems}
               </p>
               <p>
-                <strong>Preço total:</strong> R$ {totalPrice.toFixed(2)}
+                <strong>Preço total: </strong>
+                {totalPrice.toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
               </p>
             </Summary>
           </>
