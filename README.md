@@ -1,21 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Fake Product Store
+Bem-vindo ao Fake Product Store, uma loja fictícia criada como um projeto de exemplo utilizando Next.js. Este aplicativo demonstra como construir uma loja online com Next.js, incluindo funcionalidades como um carrinho de compras, listagem de produtos e uma interface moderna.
 
-## Getting Started
+🚀 Começando
+Siga as instruções abaixo para rodar o projeto localmente.
 
-First, run the development server:
+📋 Pré-requisitos
+Node.js (versão 14 ou superior)
+npm
+🔧 Instalação
+Clone o repositório
 
-```bash
+git clone https://github.com/seu-usuario/fake-product-store.git
+cd fake-product-store
+
+Instale as dependências Usando npm:
+
+npm install
+
+Usando npm, rode o projeto:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Funcionalidades
+Listagem de Produtos: Veja uma lista de produtos fictícios.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Detalhes do Produto: Clique em um produto para ver detalhes adicionais.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Carrinho de Compras: Adicione produtos ao carrinho e veja o resumo do carrinho.
+
+Remoção de Produtos: Remova itens do carrinho com uma animação suave.
+📂 Estrutura do Projeto
+app/: Contém as páginas da aplicação.
+components/: Componentes reutilizáveis.
+hooks/: Hooks personalizados.
+context/: Contextos React para gerenciamento de estado global.
+services/: Comunicação com a API externa
+types/: Tipagens da aplicação
+
+
+📄 Documentação Adicional
+Para mais detalhes sobre o Next.js, consulte a documentação oficial.
+
