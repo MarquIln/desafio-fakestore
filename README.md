@@ -41,10 +41,15 @@ O que voce verá nesse projeto:
 📂 Estrutura do Projeto
 
   -> app/: Contém as páginas da aplicação.
+  
   -> components/: Componentes reutilizáveis.
+  
   -> hooks/: Hooks personalizados.
+  
   -> context/: Contextos React para gerenciamento de estado global.
+  
   -> services/: Comunicação com a API externa
+  
   -> types/: Tipagens da aplicação
 
 
