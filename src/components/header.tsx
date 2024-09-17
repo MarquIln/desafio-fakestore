@@ -12,7 +12,7 @@ import { useCartStore } from '@/context/cart-store'
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
   onCategoryChange?: (category: string) => void
-  disableFilters?: boolean // New prop to disable filters
+  disableFilters?: boolean
 }
 
 export const Header = ({

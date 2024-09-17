@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
-import { PopUp } from '@/components/pop-up' // Importa o componente PopUp
+import { PopUp } from '@/components/pop-up'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const { product, fetchProductById } = useProductStore((state) => ({
@@ -41,7 +41,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   const handleAddToCart = (product: Product) => {
     addToCart(product)
     setShowPopUp(true)
-    setTimeout(() => setShowPopUp(false), 3000) // Oculta o pop-up após 3 segundos
+    setTimeout(() => setShowPopUp(false), 3000)
   }
 
   return (

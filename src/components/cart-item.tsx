@@ -2,7 +2,7 @@ import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { FaTrash } from 'react-icons/fa' // Importa o ícone de lixeira
+import { FaTrash } from 'react-icons/fa'
 
 interface CartItemProps {
   product: Product
