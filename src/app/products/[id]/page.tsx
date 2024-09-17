@@ -44,7 +44,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         <ProductPageSkeleton />
       ) : product ? (
         <Page>
-          <ProductDetails product={product} onAddToCart={handleAddToCart} />
+          <ProductDetails product={product} addToCart={handleAddToCart} />
           <div>
             <h2 style={{ color: 'black' }}>
               Produtos que você pode gostar também:

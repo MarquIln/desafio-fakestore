@@ -24,6 +24,7 @@ export const Header = ({
   const [keyword, setKeyword] = useState('')
   const { cart } = useCartStore()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0)
 
   const handleKeywordChange = (keyword: string) => {
     setKeyword(keyword)
@@ -47,7 +48,7 @@ export const Header = ({
           onCategoryChange={onCategoryChange}
           disableFilters={disableFilters}
         />
-        <Logo onClick={() => router.push('/')}>Store</Logo>
+        <Logo onClick={() => router.push('/')}>FakeStore</Logo>
         <FiltersDesktop>
           <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
           {!disableFilters && (
@@ -60,7 +61,7 @@ export const Header = ({
         </FiltersDesktop>
         <Cart onClick={() => router.push('/cart')}>
           <BsCart />
-          {cart.length > 0 && <CartQuantity>{cart.length}</CartQuantity>}
+          {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}
         </Cart>
       </StyledHeader>
     </>
@@ -83,6 +84,7 @@ const Logo = styled.p`
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
+  color: #fd3a3a;
 `
 
 const Cart = styled.div`
