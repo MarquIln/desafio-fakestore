@@ -1,19 +1,20 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
+'use client'
+
+import { Header } from '@/components/header'
+import { PageNumbers } from '@/components/page-numbers'
+import { ChangePageButton, Pagination } from '@/components/pagination'
+import { PopUp } from '@/components/pop-up'
+import { ProductGrid } from '@/components/product-grid'
+import { useScrollToTop } from '@/hooks/use-scroll-up'
 import {
   fetchAllProducts,
   fetchProductByCategory,
   fetchProductsByPage,
 } from '@/services/api'
 import type { Product } from '@/types/product'
-import { Header } from '@/components/header'
-import { Pagination, ChangePageButton } from '@/components/pagination'
-import { Card } from '@/components/card'
-import { ProductCard, ProductGrid } from '@/components/product-card'
-import { AllProductsSkeleton } from '@/components/all-products-skeleton'
-import { PopUp } from '@/components/pop-up'
-import { PageNumbers } from '@/components/page-numbers'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
 
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -21,14 +22,10 @@ export default function AllProductsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [keyword, setKeyword] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [scrolling, setScrolling] = useState(false)
-  const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  )
   const [showPopup, setShowPopup] = useState(false)
-  const [popupMessage] = useState('Item adicionado ao carrinho!')
   const router = useRouter()
   const totalPages = 7
+  const { handleScroll } = useScrollToTop(true)
 
   const getProducts = useCallback(async () => {
     setIsLoading(true)
@@ -64,45 +61,17 @@ export default function AllProductsPage() {
     getProducts()
   }, [getProducts])
 
-  useEffect(() => {
-    if (scrolling) {
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout)
-      }
-      const timeout = setTimeout(() => {
-        setScrolling(false)
-      }, 1000)
-      setScrollTimeout(timeout)
-    }
-  }, [scrolling, scrollTimeout])
-
-  const handleKeywordChange = (keyword: string) => {
-    setKeyword(keyword)
-    setPage(1)
-    if (keyword === '') {
-      setSelectedCategory(null)
-    }
-  }
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category)
-    setKeyword('')
-    setPage(1)
-  }
-
   const handleNextPage = () => {
     if (keyword === '' && page < totalPages) {
-      setScrolling(true)
+      handleScroll()
       setPage(page + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const handlePreviousPage = () => {
     if (keyword === '' && page > 1) {
-      setScrolling(true)
+      handleScroll()
       setPage(page - 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -110,81 +79,55 @@ export default function AllProductsPage() {
     router.push(`/products/${id}`)
   }
 
-  const handlePageClick = useCallback((pageNumber: number) => {
-    setScrolling(true)
-    setPage(pageNumber)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
+  const handlePageClick = useCallback(
+    (pageNumber: number) => {
+      handleScroll()
+      setPage(pageNumber)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+    [handleScroll],
+  )
 
-  const filteredProducts = useMemo(() => {
-    if (keyword) {
-      return products.filter((product) =>
-        product.title.toLowerCase().includes(keyword.toLowerCase()),
-      )
-    }
-    return products
-  }, [products, keyword])
-
-  const showAddToCartPopup = () => {
+  const showPopupForDuration = (duration: number) => {
     setShowPopup(true)
-    setTimeout(() => {
-      setShowPopup(false)
-    }, 3000)
+    setTimeout(() => setShowPopup(false), duration)
   }
+
+  const showAddToCartPopup = () => showPopupForDuration(3000)
 
   return (
     <div>
       <Header
-        onKeywordChange={handleKeywordChange}
-        onCategoryChange={handleCategoryChange}
+        onKeywordChange={setKeyword}
+        onCategoryChange={setSelectedCategory}
       />
-      {isLoading ? (
-        <ProductGrid>
-          {Array.from({ length: 24 }).map((_, index) => (
-            <ProductCard key={index}>
-              <AllProductsSkeleton />
-            </ProductCard>
-          ))}
-        </ProductGrid>
-      ) : (
-        <>
-          <ProductGrid>
-            {filteredProducts.map((product: Product) => (
-              <ProductCard key={product.id}>
-                <Card
-                  product={product}
-                  onClick={() => goToProductPage(product.id)}
-                  onAddToCart={showAddToCartPopup}
-                />
-              </ProductCard>
-            ))}
-          </ProductGrid>
-          {!keyword && !selectedCategory && (
-            <Pagination>
-              <ChangePageButton
-                onClick={handlePreviousPage}
-                disabled={page === 1}
-              >
-                <FaArrowCircleLeft color={'#fd3a3a'} />
-              </ChangePageButton>
-              <PageNumbers
-                page={page}
-                totalPages={totalPages}
-                keyword={keyword}
-                selectedCategory={selectedCategory}
-                onPageClick={handlePageClick}
-              />
-              <ChangePageButton
-                onClick={handleNextPage}
-                disabled={page === totalPages}
-              >
-                <FaArrowCircleRight color={'#fd3a3a'} />
-              </ChangePageButton>
-            </Pagination>
-          )}
-        </>
+      <ProductGrid
+        products={products}
+        onProductClick={goToProductPage}
+        onAddToCart={showAddToCartPopup}
+        isLoading={isLoading}
+      />
+      {!keyword && !selectedCategory && (
+        <Pagination>
+          <ChangePageButton onClick={handlePreviousPage} disabled={page === 1}>
+            <FaArrowCircleLeft color={'#fd3a3a'} />
+          </ChangePageButton>
+          <PageNumbers
+            page={page}
+            totalPages={totalPages}
+            onPageClick={handlePageClick}
+            keyword={keyword}
+            selectedCategory={selectedCategory}
+          />
+          <ChangePageButton
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+          >
+            <FaArrowCircleRight color={'#fd3a3a'} />
+          </ChangePageButton>
+        </Pagination>
       )}
-      {showPopup && <PopUp>{popupMessage}</PopUp>}
+      {showPopup && <PopUp>Produto adicionado ao carrinho</PopUp>}
     </div>
   )
 }
