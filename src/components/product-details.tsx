@@ -34,7 +34,7 @@ export const ProductDetails = ({ product, addToCart }: ProductDetailsProps) => {
       <ProductDetailsContainer>
         <Details>
           <Title>{formattedTitle}</Title>
-          <div style={{ color: 'black' }}>Descrição</div>
+          <div style={{ color: 'black', fontWeight: 'bold' }}>Descrição</div>
           <Description>{product.description}</Description>
           <Model>Modelo: {product.model}</Model>
           <Color>Cor: {product.color}</Color>
@@ -175,10 +175,10 @@ const Title = styled.h1`
 
 const Description = styled.p`
   font-size: 1rem;
-  margin-left: 20px;
   color: #666;
   margin-bottom: 20px;
   text-transform: capitalize;
+  text-align: justify;
 `
 
 const Category = styled.div`
@@ -198,6 +198,6 @@ const Color = styled.div`
 const Model = styled.div`
   font-size: 1rem;
   color: black;
-  padding: 20px 0px;
+  padding: 10px 0px;
   text-transform: capitalize;
 `

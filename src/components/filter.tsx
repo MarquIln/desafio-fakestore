@@ -1,6 +1,6 @@
 import { fetchAllCategories } from '@/services/api'
-import React, { useState, useEffect } from 'react'
-import { FaFilter } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { FaAngleDoubleDown } from 'react-icons/fa'
 import styled from 'styled-components'
 
 interface FilterProps {
@@ -39,7 +39,8 @@ export const Filter = ({ onCategoryChange }: FilterProps) => {
         active={!!activeCategory}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <FaFilter />
+        Filtros
+        <FaAngleDoubleDown style={{ marginLeft: '8px' }} />
       </DropdownButton>
 
       <DropdownContent open={isOpen}>
@@ -72,6 +73,8 @@ const DropdownButton = styled.button<{ active: boolean }>`
   cursor: pointer;
   border-radius: 4px;
   color: ${(props) => (props.active ? 'white' : 'black')};
+  display: flex;
+  align-items: center;
 `
 
 const DropdownContent = styled.div<{ open: boolean }>`
@@ -90,6 +93,8 @@ const DropdownItem = styled.div`
   border: 1px solid white;
   border-radius: 4px;
   color: black;
+  text-transform: capitalize;
+
   &:hover {
     background-color: #c3c3c3;
   }
