@@ -73,6 +73,11 @@ const ImageWrapper = styled.div`
   height: 150px;
   border-radius: 10px;
   overflow: hidden;
+  margin-left: 15px;
+
+  @media (max-width: 769px) {
+    margin-left: 45px;
+  }
 `
 
 const Title = styled.h2`
