@@ -36,18 +36,17 @@ export default function CartPage() {
   return (
     <>
       <Header />
-      <CartWrapper>
+      <PageWrapper>
         <h1>Carrinho</h1>
         {items.length > 0 ? (
           <>
             {items.map((product) => (
-              <CartItemWrapper key={product.id}>
-                <CartItem
-                  product={product}
-                  quantity={product.quantity}
-                  onRemove={handleRemoveFromCart}
-                />
-              </CartItemWrapper>
+              <CartItem
+                key={product.id}
+                product={product}
+                quantity={product.quantity}
+                onRemove={handleRemoveFromCart}
+              />
             ))}
             <Summary>
               <p>
@@ -65,12 +64,12 @@ export default function CartPage() {
         ) : (
           <EmptyCartMessage>Seu carrinho está vazio ainda.</EmptyCartMessage>
         )}
-      </CartWrapper>
+      </PageWrapper>
     </>
   )
 }
 
-const CartWrapper = styled.div`
+const PageWrapper = styled.div`
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
@@ -78,10 +77,6 @@ const CartWrapper = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   color: black;
-`
-
-const CartItemWrapper = styled.div`
-  margin-bottom: 1rem;
 `
 
 const Summary = styled.div`
