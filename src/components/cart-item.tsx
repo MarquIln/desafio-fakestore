@@ -13,10 +13,16 @@ interface CartItemProps {
 export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
-  const totalPrice = product.price * quantity
+  const price = Number(product.price)
+  const discount = Number(product.discount)
+  const validQuantity = Number(quantity)
 
-  const discountedPrice =
-    (product.price - product.price * (product.discount / 100)) * quantity
+  if (isNaN(price) || isNaN(discount) || isNaN(validQuantity)) {
+    return <div>Dados inválidos</div>
+  }
+
+  const totalPrice = price * validQuantity
+  const discountedPrice = (price - price * (discount / 100)) * validQuantity
 
   return (
     <CartWrapper>
@@ -48,7 +54,7 @@ export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
               </PriceWithDiscount>
             )}
           </PriceWrapper>
-          <ProductQuantity>Quantidade: {quantity}</ProductQuantity>
+          <ProductQuantity>Quantidade: {validQuantity}</ProductQuantity>
         </ProductInfo>
         <RemoveButton onClick={() => onRemove(product.id)}>
           <FaTrash />
