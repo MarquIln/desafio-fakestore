@@ -1,21 +1,24 @@
-'use client'
-
 import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
 import { FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
+import { useDiscountedPrice } from '@/hooks/use-discounted-price'
 
 interface ProductDetailsProps {
   product: Product
-  onAddToCart: (product: Product) => void
+  addToCart: (product: Product, discountedPrice?: number) => void
 }
 
-export const ProductDetails = ({
-  product,
-  onAddToCart,
-}: ProductDetailsProps) => {
+export const ProductDetails = ({ product, addToCart }: ProductDetailsProps) => {
   const formattedTitle = useFormatTitle(product.brand, product.model)
+  const discountedPrice = useDiscountedPrice(product.price, product.discount)
+
+  const handleAddToCart = () => {
+    const priceToUse = discountedPrice || product.price
+
+    addToCart(product, priceToUse)
+  }
 
   return (
     <ProductWrapper>
@@ -33,12 +36,21 @@ export const ProductDetails = ({
           <Title>{formattedTitle}</Title>
           <div style={{ color: 'black' }}>Descrição</div>
           <Description>{product.description}</Description>
+          <Model>Modelo: {product.model}</Model>
+          <Color>Cor: {product.color}</Color>
           <Category>
             Categoria: <strong>{product.category}</strong>
           </Category>
+          {product.discount > 0 ? (
+            <DiscountContainer>
+              <OriginalPrice>{`$ ${product.price.toFixed(2)}`}</OriginalPrice>
+              <DiscountedPrice>{`$ ${discountedPrice.toFixed(2)}`}</DiscountedPrice>
+            </DiscountContainer>
+          ) : (
+            <Price>{`$ ${product.price.toFixed(2)}`}</Price>
+          )}
           <ButtonContainer>
-            <Price>{`$ ${product.price}`}</Price>
-            <AddToCartButton onClick={() => onAddToCart(product)}>
+            <AddToCartButton onClick={handleAddToCart}>
               <FaShoppingCart /> Adicionar ao Carrinho
             </AddToCartButton>
           </ButtonContainer>
@@ -95,12 +107,6 @@ const ImageWrapper = styled.div`
   }
 `
 
-const Title = styled.h1`
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 15px;
-`
-
 const Price = styled.p`
   font-size: 1.8rem;
   font-weight: bold;
@@ -108,17 +114,32 @@ const Price = styled.p`
   margin-bottom: 15px;
 `
 
-const Description = styled.p`
-  font-size: 1rem;
-  margin-left: 20px;
+const DiscountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+`
+
+const OriginalPrice = styled.p`
+  font-size: 1.8rem;
+  font-weight: bold;
   color: #666;
-  margin-bottom: 20px;
+  text-decoration: line-through;
+  margin: 0;
+`
+
+const DiscountedPrice = styled.p`
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fd3a3a;
+  margin: 0;
 `
 
 const Details = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
 `
 
 const ButtonContainer = styled.div`
@@ -145,8 +166,38 @@ const AddToCartButton = styled.button`
   }
 `
 
+const Title = styled.h1`
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 15px;
+  text-transform: capitalize;
+`
+
+const Description = styled.p`
+  font-size: 1rem;
+  margin-left: 20px;
+  color: #666;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+`
+
 const Category = styled.div`
   font-size: 1rem;
   color: black;
-  margin-top: 20px;
+  padding: 10px 0px;
+  text-transform: capitalize;
+`
+
+const Color = styled.div`
+  font-size: 1rem;
+  color: black;
+  padding: 10px 0px;
+  text-transform: capitalize;
+`
+
+const Model = styled.div`
+  font-size: 1rem;
+  color: black;
+  padding: 20px 0px;
+  text-transform: capitalize;
 `

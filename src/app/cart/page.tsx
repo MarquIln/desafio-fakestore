@@ -30,7 +30,11 @@ export default function CartPage() {
   )
 
   const totalPrice = useMemo(
-    () => items.reduce((total, item) => total + item.price * item.quantity, 0),
+    () =>
+      items.reduce(
+        (total, item) => total + item.discountedPrice * item.quantity,
+        0,
+      ),
     [items],
   )
 
@@ -88,7 +92,7 @@ export default function CartPage() {
               <li key={product.id}>
                 {useFormatTitle(product.brand, product.model)} -{' '}
                 <strong>{product.quantity}</strong> unidade(s) -{' '}
-                {product.price.toLocaleString('pt-br', {
+                {product.discountedPrice.toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'USD',
                 })}{' '}

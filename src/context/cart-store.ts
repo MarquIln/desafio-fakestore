@@ -1,8 +1,13 @@
-import type { Product } from '@/types/product'
 import { create } from 'zustand'
+import type { Product } from '@/types/product'
+
+const calculateDiscountedPrice = (price: number, discount: number) => {
+  return price - price * (discount / 100)
+}
 
 interface CartItem extends Product {
   quantity: number
+  discountedPrice: number
 }
 
 interface CartState {
@@ -16,6 +21,11 @@ export const useCartStore = create<CartState>((set) => ({
   cart: [],
 
   addToCart: (product: Product) => {
+    const discountedPrice = calculateDiscountedPrice(
+      product.price,
+      product.discount,
+    )
+
     set((state) => {
       const existingItem = state.cart.find((item) => item.id === product.id)
       const updatedCart = existingItem
@@ -24,7 +34,8 @@ export const useCartStore = create<CartState>((set) => ({
               ? { ...item, quantity: item.quantity + 1 }
               : item,
           )
-        : [...state.cart, { ...product, quantity: 1 }]
+        : [...state.cart, { ...product, quantity: 1, discountedPrice }]
+
       localStorage.setItem('cart', JSON.stringify(updatedCart))
       return { cart: updatedCart }
     })
@@ -42,6 +53,7 @@ export const useCartStore = create<CartState>((set) => ({
         }
         return acc
       }, [] as CartItem[])
+
       localStorage.setItem('cart', JSON.stringify(updatedCart))
       return { cart: updatedCart }
     })

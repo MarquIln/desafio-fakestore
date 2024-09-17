@@ -13,6 +13,11 @@ interface CartItemProps {
 export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
+  const totalPrice = product.price * quantity
+
+  const discountedPrice =
+    (product.price - product.price * (product.discount / 100)) * quantity
+
   return (
     <CartWrapper>
       <CartItemWrapper>
@@ -24,13 +29,25 @@ export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
         />
         <ProductInfo>
           <ProductTitle>{formattedTitle}</ProductTitle>
-          <ProductPrice>
-            Preço:{' '}
-            {product.price.toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'USD',
-            })}
-          </ProductPrice>
+          <PriceWrapper>
+            <ProductPrice>
+              <span>Preço:</span>{' '}
+              <del>
+                {totalPrice.toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
+              </del>
+            </ProductPrice>
+            {product.discount > 0 && (
+              <PriceWithDiscount>
+                {discountedPrice.toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
+              </PriceWithDiscount>
+            )}
+          </PriceWrapper>
           <ProductQuantity>Quantidade: {quantity}</ProductQuantity>
         </ProductInfo>
         <RemoveButton onClick={() => onRemove(product.id)}>
@@ -78,6 +95,11 @@ const ProductTitle = styled.h2`
 const ProductPrice = styled.p`
   margin: 0.5rem 0;
   font-size: 1rem;
+  color: black;
+
+  del {
+    color: #fd3a3a;
+  }
 `
 
 const ProductQuantity = styled.p`
@@ -103,4 +125,15 @@ const RemoveButton = styled.button`
   svg {
     margin: 0;
   }
+`
+
+const PriceWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const PriceWithDiscount = styled.span`
+  margin-left: 1rem;
+  color: black;
+  font-weight: bold;
 `
