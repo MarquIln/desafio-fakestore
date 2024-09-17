@@ -44,7 +44,7 @@ export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
 const CartWrapper = styled.div`
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -59,7 +59,6 @@ const CartItemWrapper = styled.div`
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
 `
 
 const ProductImage = styled(Image)`
