@@ -1,6 +1,5 @@
 'use client'
 
-import { CategoriesSlider } from '@/components/categories-slider'
 import { Header } from '@/components/header'
 import { LikedProducts } from '@/components/liked-products'
 import { ProductPageSkeleton } from '@/components/product-page-skeleton'
@@ -45,7 +44,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <Header />
-      <CategoriesSlider />
       {loading ? (
         <ProductPageSkeleton />
       ) : product ? (

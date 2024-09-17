@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { BsCart } from 'react-icons/bs'
@@ -10,9 +12,14 @@ import { useCartStore } from '@/context/cart-store'
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
   onCategoryChange?: (category: string) => void
+  disableFilters?: boolean // New prop to disable filters
 }
 
-export const Header = ({ onKeywordChange, onCategoryChange }: HeaderProps) => {
+export const Header = ({
+  onKeywordChange,
+  onCategoryChange,
+  disableFilters = false,
+}: HeaderProps) => {
   const router = useRouter()
   const [keyword, setKeyword] = useState('')
   const { cart } = useCartStore()
@@ -44,13 +51,15 @@ export const Header = ({ onKeywordChange, onCategoryChange }: HeaderProps) => {
         </Logo>
         <FiltersDesktop>
           <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
-          <Filter
-            onCategoryChange={(category) => {
-              if (onCategoryChange) {
-                onCategoryChange(category)
-              }
-            }}
-          />
+          {!disableFilters && (
+            <Filter
+              onCategoryChange={(category) => {
+                if (onCategoryChange) {
+                  onCategoryChange(category)
+                }
+              }}
+            />
+          )}
         </FiltersDesktop>
         <Cart
           onClick={() => {
@@ -65,13 +74,15 @@ export const Header = ({ onKeywordChange, onCategoryChange }: HeaderProps) => {
       <MobileSidebar $isOpen={isSidebarOpen}>
         <SidebarContent>
           <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
-          <Filter
-            onCategoryChange={(category) => {
-              if (onCategoryChange) {
-                onCategoryChange(category)
-              }
-            }}
-          />
+          {!disableFilters && (
+            <Filter
+              onCategoryChange={(category) => {
+                if (onCategoryChange) {
+                  onCategoryChange(category)
+                }
+              }}
+            />
+          )}
         </SidebarContent>
       </MobileSidebar>
 
@@ -148,7 +159,8 @@ const MobileSidebar = styled.aside<{ $isOpen: boolean }>`
   top: 0;
   left: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
   height: 100%;
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
   background-color: white;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
@@ -157,6 +169,7 @@ const MobileSidebar = styled.aside<{ $isOpen: boolean }>`
   flex-direction: column;
   padding: 20px;
   overflow: hidden;
+  box-sizing: border-box;
 
   @media (min-width: 769px) {
     display: none;
@@ -168,7 +181,8 @@ const SidebarContent = styled.div`
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
+  box-sizing: border-box;
 `
 
 const Overlay = styled.div`
