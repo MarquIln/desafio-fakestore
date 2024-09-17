@@ -5,7 +5,6 @@ interface CartState {
   cart: Product[]
   addToCart: (product: Product) => void
   removeFromCart: (id: number) => void
-  updateCart: (cart: Product[]) => void
   loadCartFromLocalStorage: () => void
 }
 
@@ -26,11 +25,6 @@ export const useCartStore = create<CartState>((set) => ({
       localStorage.setItem('cart', JSON.stringify(updatedCart))
       return { cart: updatedCart }
     })
-  },
-
-  updateCart: (cart: Product[]) => {
-    localStorage.setItem('cart', JSON.stringify(cart))
-    set({ cart })
   },
 
   loadCartFromLocalStorage: () => {
