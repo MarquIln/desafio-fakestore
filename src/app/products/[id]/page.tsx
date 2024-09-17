@@ -46,9 +46,9 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         <Page>
           <ProductDetails product={product} addToCart={handleAddToCart} />
           <div>
-            <h2 style={{ color: 'black' }}>
+            <LikedProductsText>
               Produtos que você pode gostar também:
-            </h2>
+            </LikedProductsText>
             <LikedProducts product={product} />
           </div>
           {showPopUp && <PopUp>Produto adicionado ao carrinho!</PopUp>}
@@ -71,4 +71,10 @@ const ErrorMessage = styled.div`
   color: red;
   text-align: center;
   margin-top: 50px;
+`
+
+const LikedProductsText = styled.h2`
+  font-size: 1.5rem;
+  padding: 30px 0px 0px 30px;
+  color: black;
 `
