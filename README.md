@@ -1,14 +1,18 @@
 Fake Product Store
+
+
 Bem-vindo ao Fake Product Store, uma loja fictícia criada como um projeto de exemplo utilizando Next.js. Este aplicativo demonstra como construir uma loja online com Next.js, incluindo funcionalidades como um carrinho de compras, listagem de produtos e uma interface moderna.
 
 🚀 Começando
 
 Siga as instruções abaixo para rodar o projeto localmente.
 
+
 📋 Pré-requisitos
 
 Node.js (versão 14 ou superior)
 npm
+
 
 🔧 Instalação
 
@@ -25,7 +29,8 @@ Usando npm, rode o projeto:
 
 npm run dev
 
-Funcionalidades
+O que voce verá nesse projeto: 
+
 Listagem de Produtos: Veja uma lista de produtos fictícios.
 
 Detalhes do Produto: Clique em um produto para ver detalhes adicionais.
@@ -33,7 +38,10 @@ Detalhes do Produto: Clique em um produto para ver detalhes adicionais.
 Carrinho de Compras: Adicione produtos ao carrinho e veja o resumo do carrinho.
 
 Remoção de Produtos: Remova itens do carrinho com uma animação suave.
+
+
 📂 Estrutura do Projeto
+
 app/: Contém as páginas da aplicação.
 components/: Componentes reutilizáveis.
 hooks/: Hooks personalizados.
