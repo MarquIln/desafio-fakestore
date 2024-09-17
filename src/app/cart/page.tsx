@@ -89,7 +89,6 @@ export default function CartPage() {
         <div>
           <ul>
             {items.map((product) => {
-              // Use `product.discountedPrice` se houver desconto, caso contrário use `product.price`.
               const displayPrice = product.discountedPrice ?? product.price ?? 0
 
               return (
