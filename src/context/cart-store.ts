@@ -21,10 +21,13 @@ export const useCartStore = create<CartState>((set) => ({
   cart: [],
 
   addToCart: (product: Product) => {
-    const discountedPrice = calculateDiscountedPrice(
-      product.price,
-      product.discount,
-    )
+    let discountedPrice: number
+    if (product.discount) {
+      discountedPrice = calculateDiscountedPrice(
+        product.price,
+        product.discount,
+      )
+    }
 
     set((state) => {
       const existingItem = state.cart.find((item) => item.id === product.id)

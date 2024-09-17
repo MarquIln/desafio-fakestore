@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
-export const useDiscountedPrice = (price: number, discount: number) => {
+export const useDiscountedPrice = (price: number, discount: number | null) => {
   return useMemo(() => {
-    if (discount > 0) {
+    if (discount !== null) {
       return price - price * (discount / 100)
     }
     return price

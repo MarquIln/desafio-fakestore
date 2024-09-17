@@ -8,5 +8,5 @@ export interface Product {
   description: string
   category: string
   color: string
-  discount: number
+  discount: number | null
 }
