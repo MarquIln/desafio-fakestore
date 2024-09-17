@@ -39,24 +39,34 @@ export const ProductGrid = ({
 
 export const ProductGridStyle = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-top: 40px;
 
   @media (max-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 1rem;
   }
 `
 
 export const ProductCard = styled.div`
-  flex: 1 1 200px;
+  flex: 1 1 320px;
   box-sizing: border-box;
-  margin: 0.5rem;
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 10px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  height: auto;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
 
   @media (max-width: 600px) {
-    max-width: calc(100% - 1rem);
-
-    padding: 0.5rem 2rem;
+    max-width: 100%;
   }
 `

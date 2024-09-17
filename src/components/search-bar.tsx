@@ -28,11 +28,10 @@ export const SearchBar = ({ keyword, onKeywordChange }: SearchBarProps) => {
 const StyledSearchBar = styled.div`
   display: flex;
   align-items: center;
-  background-color: white;
-  border-radius: 50px;
+  background-color: #e9e9e9;
+  border-radius: 10px;
   padding: 10px 20px;
   width: 500px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   input {
     flex: 1;

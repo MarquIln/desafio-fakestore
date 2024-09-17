@@ -127,16 +127,13 @@ const PageWrapper = styled.div`
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   color: black;
 `
 
 const Summary = styled.div`
   margin-top: 2rem;
   padding: 1.5rem;
-  background-color: #f9f9f9;
   border-radius: 8px;
   color: black;
   font-size: 1.2rem;

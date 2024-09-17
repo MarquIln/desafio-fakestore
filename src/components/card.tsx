@@ -78,7 +78,7 @@ const ImageWrapper = styled.div`
   height: 150px;
   border-radius: 10px;
   overflow: hidden;
-  margin-left: 15px;
+  margin-left: 40px;
 
   @media (max-width: 769px) {
     margin-left: 45px;

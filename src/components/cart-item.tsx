@@ -104,11 +104,12 @@ const CartItemWrapper = styled.div`
   }
 `
 
-const ProductImage = styled(Image)`
-  border-radius: 8px;
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 1rem;
+export const ProductImage = styled(Image)`
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `
 
 const ProductInfo = styled.div`
@@ -133,7 +134,11 @@ const ProductTitle = styled.h2`
 const PriceWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
 `
 
 const ProductPrice = styled.p`
