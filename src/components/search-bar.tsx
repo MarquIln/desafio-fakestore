@@ -44,6 +44,10 @@ const StyledSearchBar = styled.div`
     font-size: 16px;
   }
 
+  @media (max-width: 769px) {
+    width: 100%;
+  }
+
   input::placeholder {
     color: gray;
   }
