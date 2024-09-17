@@ -19,10 +19,13 @@ export default function CartPage() {
     loadCartFromLocalStorage()
   }, [loadCartFromLocalStorage])
 
-  const totalItems = useMemo(() => items.length, [items])
+  const totalItems = useMemo(
+    () => items.reduce((total, item) => total + item.quantity, 0),
+    [items],
+  )
 
   const totalPrice = useMemo(
-    () => items.reduce((total, item) => total + item.price, 0),
+    () => items.reduce((total, item) => total + item.price * item.quantity, 0),
     [items],
   )
 
@@ -39,7 +42,11 @@ export default function CartPage() {
           <>
             {items.map((product) => (
               <CartItemWrapper key={product.id}>
-                <CartItem product={product} onRemove={handleRemoveFromCart} />
+                <CartItem
+                  product={product}
+                  quantity={product.quantity}
+                  onRemove={handleRemoveFromCart}
+                />
               </CartItemWrapper>
             ))}
             <Summary>
@@ -56,7 +63,7 @@ export default function CartPage() {
             </Summary>
           </>
         ) : (
-          <EmptyCartMessage>Seu carrinho está vazio 😭</EmptyCartMessage>
+          <EmptyCartMessage>Seu carrinho está vazio ainda.</EmptyCartMessage>
         )}
       </CartWrapper>
     </>

@@ -1,93 +1,95 @@
 import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
-import styled from 'styled-components'
 import Image from 'next/image'
-import { TbTrash } from 'react-icons/tb'
+import styled from 'styled-components'
+import { FaTrash } from 'react-icons/fa' // Importa o ícone de lixeira
 
 interface CartItemProps {
   product: Product
+  quantity: number
   onRemove: (id: number) => void
 }
 
-export const CartItem = ({ product, onRemove }: CartItemProps) => {
+export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
   return (
-    <CartItemContainer>
-      <CartItemDetails>
-        <Image
-          src={product.image}
-          alt={`Imagem do ${product.brand} ${product.model}`}
-          width={100}
-          height={100}
-          style={{ borderRadius: '8px', objectFit: 'cover' }}
-        />
-        <CartItemText>
-          <CartItemTitle>{formattedTitle}</CartItemTitle>
-          <CartItemPrice>
-            {product.price.toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'USD',
-            })}
-          </CartItemPrice>
-        </CartItemText>
-        <RemoveButton onClick={() => onRemove(product.id)}>
-          <TbTrash />
-        </RemoveButton>
-      </CartItemDetails>
-    </CartItemContainer>
+    <CartItemWrapper>
+      <ProductImage
+        src={product.image}
+        alt={product.title}
+        width={100}
+        height={100}
+      />
+      <ProductInfo>
+        <ProductTitle>{formattedTitle}</ProductTitle>
+        <ProductPrice>
+          Preço:{' '}
+          {product.price.toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </ProductPrice>
+        <ProductQuantity>Quantidade: {quantity}</ProductQuantity>
+      </ProductInfo>
+      <RemoveButton onClick={() => onRemove(product.id)}>
+        <FaTrash />
+      </RemoveButton>
+    </CartItemWrapper>
   )
 }
 
-const CartItemContainer = styled.div`
+const CartItemWrapper = styled.div`
   display: flex;
-  width: 100%;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0;
-  color: black;
-  border-radius: 8px;
   background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 `
 
-const CartItemDetails = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  align-items: center;
-  width: 100%;
+const ProductImage = styled(Image)`
+  border-radius: 8px;
 `
 
-const CartItemText = styled.div`
-  display: flex;
-  flex-direction: column;
+const ProductInfo = styled.div`
   flex: 1;
+  margin-left: 1rem;
 `
 
-const CartItemTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: bold;
+const ProductTitle = styled.h2`
   margin: 0;
-  color: #333;
+  font-size: 1.2rem;
 `
 
-const CartItemPrice = styled.p`
-  font-size: 1.2rem;
-  margin: 5px 0 0;
-  color: #555;
+const ProductPrice = styled.p`
+  margin: 0.5rem 0;
+  font-size: 1rem;
+`
+
+const ProductQuantity = styled.p`
+  margin: 0.5rem 0;
+  font-size: 1rem;
 `
 
 const RemoveButton = styled.button`
-  background: none;
+  background-color: transparent;
+  color: #fd3a3a;
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  color: #ff6b6b;
-  transition: color 0.3s ease;
-  padding-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 2rem;
 
   &:hover {
-    color: #ff4d4d;
+    opacity: 0.8;
+  }
+
+  svg {
+    margin: 0;
   }
 `
