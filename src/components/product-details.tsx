@@ -41,7 +41,7 @@ export const ProductDetails = ({ product, addToCart }: ProductDetailsProps) => {
           <Category>
             Categoria: <strong>{product.category}</strong>
           </Category>
-          {product.discount > 0 ? (
+          {product.discount !== null ? (
             <DiscountContainer>
               <OriginalPrice>{`$ ${product.price.toFixed(2)}`}</OriginalPrice>
               <DiscountedPrice>{`$ ${discountedPrice.toFixed(2)}`}</DiscountedPrice>
