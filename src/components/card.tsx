@@ -33,7 +33,12 @@ export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
   return (
     <CardContainer onClick={onClick}>
       <ImageWrapper>
-        <Image src={product.image} alt="imagem do produto" fill />
+        <Image
+          src={product.image}
+          alt="imagem do produto"
+          layout="fill"
+          objectFit="cover"
+        />
       </ImageWrapper>
       <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>

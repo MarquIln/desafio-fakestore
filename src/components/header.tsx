@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { BsCart } from 'react-icons/bs'
-import { FaBars, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
 import { SearchBar } from './search-bar'
 import { Filter } from './filter'
 import { useCartStore } from '@/context/cart-store'
+import { Sidebar } from './sidebar'
 
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
@@ -39,54 +39,30 @@ export const Header = ({
   return (
     <>
       <StyledHeader>
-        <MenuButton onClick={toggleSidebar}>
-          {isSidebarOpen ? <FaTimes /> : <FaBars />}
-        </MenuButton>
-        <Logo
-          onClick={() => {
-            router.push('/')
-          }}
-        >
-          Store
-        </Logo>
+        <Sidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          keyword={keyword}
+          onKeywordChange={handleKeywordChange}
+          onCategoryChange={onCategoryChange}
+          disableFilters={disableFilters}
+        />
+        <Logo onClick={() => router.push('/')}>Store</Logo>
         <FiltersDesktop>
           <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
           {!disableFilters && (
             <Filter
               onCategoryChange={(category) => {
-                if (onCategoryChange) {
-                  onCategoryChange(category)
-                }
+                if (onCategoryChange) onCategoryChange(category)
               }}
             />
           )}
         </FiltersDesktop>
-        <Cart
-          onClick={() => {
-            router.push('/cart')
-          }}
-        >
+        <Cart onClick={() => router.push('/cart')}>
           <BsCart />
           {cart.length > 0 && <CartQuantity>{cart.length}</CartQuantity>}
         </Cart>
       </StyledHeader>
-
-      <MobileSidebar $isOpen={isSidebarOpen}>
-        <SidebarContent>
-          <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
-          {!disableFilters && (
-            <Filter
-              onCategoryChange={(category) => {
-                if (onCategoryChange) {
-                  onCategoryChange(category)
-                }
-              }}
-            />
-          )}
-        </SidebarContent>
-      </MobileSidebar>
-
-      {isSidebarOpen && <Overlay onClick={toggleSidebar} />}
     </>
   )
 }
@@ -132,18 +108,6 @@ const CartQuantity = styled.span`
   font-size: 0.75rem;
 `
 
-const MenuButton = styled.button`
-  font-size: 2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: black;
-
-  @media (min-width: 769px) {
-    display: none;
-  }
-`
-
 const FiltersDesktop = styled.div`
   display: none;
   gap: 20px;
@@ -151,50 +115,5 @@ const FiltersDesktop = styled.div`
 
   @media (min-width: 769px) {
     display: flex;
-  }
-`
-
-const MobileSidebar = styled.aside<{ $isOpen: boolean }>`
-  position: fixed;
-  top: 0;
-  left: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
-  height: 100%;
-  width: 100%;
-  max-width: 250px;
-  background-color: white;
-  transition: left 0.3s ease-in-out;
-  z-index: 1000;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  @media (min-width: 769px) {
-    display: none;
-  }
-`
-
-const SidebarContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  align-items: flex-start;
-  box-sizing: border-box;
-`
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-
-  @media (min-width: 769px) {
-    display: none;
   }
 `

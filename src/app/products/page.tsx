@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
@@ -10,17 +8,12 @@ import {
 } from '@/services/api'
 import type { Product } from '@/types/product'
 import { Header } from '@/components/header'
-import {
-  Pagination,
-  ChangePageButton,
-  Ellipsis,
-  PageIndicator,
-} from '@/components/pagination'
+import { Pagination, ChangePageButton } from '@/components/pagination'
 import { Card } from '@/components/card'
 import { ProductCard, ProductGrid } from '@/components/product-card'
 import { AllProductsSkeleton } from '@/components/all-products-skeleton'
-
 import { PopUp } from '@/components/pop-up'
+import { PageNumbers } from '@/components/page-numbers'
 
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -132,51 +125,6 @@ export default function AllProductsPage() {
     return products
   }, [products, keyword])
 
-  const renderPageNumbers = useMemo(() => {
-    if (keyword || selectedCategory) return null
-    const pages = []
-    pages.push(
-      <PageIndicator
-        key={1}
-        onClick={() => handlePageClick(1)}
-        isActive={page === 1}
-      >
-        1
-      </PageIndicator>,
-    )
-    if (page > 3) {
-      pages.push(<Ellipsis key="start-ellipsis">...</Ellipsis>)
-    }
-    const startPage = Math.max(2, page - 1)
-    const endPage = Math.min(totalPages - 1, page + 1)
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <PageIndicator
-          key={i}
-          onClick={() => handlePageClick(i)}
-          isActive={page === i}
-        >
-          {i}
-        </PageIndicator>,
-      )
-    }
-    if (page < totalPages - 2) {
-      pages.push(<Ellipsis key="end-ellipsis">...</Ellipsis>)
-    }
-    if (totalPages > 1) {
-      pages.push(
-        <PageIndicator
-          key={totalPages}
-          onClick={() => handlePageClick(totalPages)}
-          isActive={page === totalPages}
-        >
-          {totalPages}
-        </PageIndicator>,
-      )
-    }
-    return pages
-  }, [page, totalPages, handlePageClick, keyword, selectedCategory])
-
   const showAddToCartPopup = () => {
     setShowPopup(true)
     setTimeout(() => {
@@ -219,7 +167,13 @@ export default function AllProductsPage() {
               >
                 <FaArrowCircleLeft color={'#fd3a3a'} />
               </ChangePageButton>
-              {renderPageNumbers}
+              <PageNumbers
+                page={page}
+                totalPages={totalPages}
+                keyword={keyword}
+                selectedCategory={selectedCategory}
+                onPageClick={handlePageClick}
+              />
               <ChangePageButton
                 onClick={handleNextPage}
                 disabled={page === totalPages}
