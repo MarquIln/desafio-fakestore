@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FaShoppingCart } from 'react-icons/fa'
 import styled from 'styled-components'
+import { PopUp } from '@/components/pop-up' // Importa o componente PopUp
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const { product, fetchProductById } = useProductStore((state) => ({
@@ -21,11 +22,8 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
     addToCart: state.addToCart,
   }))
 
-  const handleAddToCart = (product: Product) => {
-    addToCart(product)
-  }
-
   const [loading, setLoading] = useState(true)
+  const [showPopUp, setShowPopUp] = useState(false)
 
   const formattedTitle = useFormatTitle(
     product?.brand || '',
@@ -36,10 +34,15 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
     const id = parseInt(params.id)
     if (!isNaN(id)) {
       setLoading(true)
-      console.log(id)
       fetchProductById(id).finally(() => setLoading(false))
     }
   }, [params.id, fetchProductById])
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(product)
+    setShowPopUp(true)
+    setTimeout(() => setShowPopUp(false), 3000) // Oculta o pop-up após 3 segundos
+  }
 
   return (
     <>
@@ -77,10 +80,11 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
           </ProductWrapper>
           <div>
             <h2 style={{ color: 'black' }}>
-              Produtos que você pode gostar tambem:
+              Produtos que você pode gostar também:
             </h2>
             <LikedProducts product={product} />
           </div>
+          {showPopUp && <PopUp>Produto adicionado ao carrinho!</PopUp>}
         </Page>
       ) : (
         <ErrorMessage>Produto não encontrado.</ErrorMessage>

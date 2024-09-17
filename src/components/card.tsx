@@ -9,9 +9,10 @@ import { BsCart } from 'react-icons/bs'
 interface CardProps {
   product: Product
   onClick: () => void
+  onAddToCart: (product: Product) => void
 }
 
-export const Card = ({ product, onClick }: CardProps) => {
+export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
   const { addToCart } = useCartStore((state) => ({
     addToCart: state.addToCart,
   }))
@@ -23,8 +24,9 @@ export const Card = ({ product, onClick }: CardProps) => {
 
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
-  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
+    onAddToCart(product)
     addToCart(product)
   }
 
@@ -42,10 +44,7 @@ export const Card = ({ product, onClick }: CardProps) => {
             currency: 'USD',
           })}
         </Price>
-        <Button
-          onClick={(event) => handleAddToCart(event, product)}
-          content={<BsCart />}
-        />
+        <Button onClick={handleAddToCart} content={<BsCart />} />
       </CardFooter>
     </CardContainer>
   )

@@ -1,7 +1,5 @@
-'use client'
-
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa'
 import {
   fetchAllProducts,
@@ -20,6 +18,8 @@ import { Card } from '@/components/card'
 import { ProductCard, ProductGrid } from '@/components/product-card'
 import { AllProductsSkeleton } from '@/components/all-products-skeleton'
 
+import { PopUp } from '@/components/pop-up'
+
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [page, setPage] = useState<number>(1)
@@ -30,6 +30,8 @@ export default function AllProductsPage() {
   const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(
     null,
   )
+  const [showPopup, setShowPopup] = useState(false)
+  const [popupMessage] = useState('Item adicionado ao carrinho!')
   const router = useRouter()
   const totalPages = 7
 
@@ -173,6 +175,13 @@ export default function AllProductsPage() {
     return pages
   }, [page, totalPages, handlePageClick, keyword, selectedCategory])
 
+  const showAddToCartPopup = () => {
+    setShowPopup(true)
+    setTimeout(() => {
+      setShowPopup(false)
+    }, 3000)
+  }
+
   return (
     <div>
       <Header
@@ -190,11 +199,12 @@ export default function AllProductsPage() {
       ) : (
         <>
           <ProductGrid>
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product: Product) => (
               <ProductCard key={product.id}>
                 <Card
                   product={product}
                   onClick={() => goToProductPage(product.id)}
+                  onAddToCart={showAddToCartPopup}
                 />
               </ProductCard>
             ))}
@@ -218,6 +228,7 @@ export default function AllProductsPage() {
           )}
         </>
       )}
+      {showPopup && <PopUp>{popupMessage}</PopUp>}
     </div>
   )
 }
