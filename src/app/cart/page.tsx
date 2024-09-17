@@ -25,16 +25,16 @@ export default function CartPage() {
   }, [loadCartFromLocalStorage])
 
   const totalItems = useMemo(
-    () => items.reduce((total, item) => total + item.quantity, 0),
+    () => items.reduce((total, item) => total + (item.quantity || 0), 0),
     [items],
   )
 
   const totalPrice = useMemo(
     () =>
-      items.reduce(
-        (total, item) => total + item.discountedPrice * item.quantity,
-        0,
-      ),
+      items.reduce((total, item) => {
+        const price = item.discountedPrice ?? item.price ?? 0
+        return total + price * (item.quantity || 0)
+      }, 0),
     [items],
   )
 
@@ -57,7 +57,7 @@ export default function CartPage() {
               <CartItem
                 key={product.id}
                 product={product}
-                quantity={product.quantity}
+                quantity={product.quantity || 0}
                 onRemove={handleRemoveFromCart}
               />
             ))}
@@ -88,17 +88,25 @@ export default function CartPage() {
       >
         <div>
           <ul>
-            {items.map((product) => (
-              <li key={product.id}>
-                {useFormatTitle(product.brand, product.model)} -{' '}
-                <strong>{product.quantity}</strong> unidade(s) -{' '}
-                {product.discountedPrice.toLocaleString('pt-br', {
-                  style: 'currency',
-                  currency: 'USD',
-                })}{' '}
-                cada
-              </li>
-            ))}
+            {items.map((product) => {
+              // Use `product.discountedPrice` se houver desconto, caso contrário use `product.price`.
+              const displayPrice = product.discountedPrice ?? product.price ?? 0
+
+              return (
+                <li key={product.id}>
+                  {useFormatTitle(
+                    product.brand || 'Marca desconhecida',
+                    product.model || 'Modelo desconhecido',
+                  )}{' '}
+                  - <strong>{product.quantity || 0}</strong> unidade(s) -{' '}
+                  {displayPrice.toLocaleString('pt-br', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}{' '}
+                  cada
+                </li>
+              )
+            })}
           </ul>
           <p>
             <strong>Total de produtos:</strong> {totalItems}
