@@ -12,6 +12,7 @@ interface CartItem extends Product {
 
 interface CartState {
   cart: CartItem[]
+  setCart: (cart: CartItem[]) => void
   addToCart: (product: Product) => void
   removeFromCart: (id: number) => void
   loadCartFromLocalStorage: () => void
@@ -19,7 +20,7 @@ interface CartState {
 
 export const useCartStore = create<CartState>((set) => ({
   cart: [],
-
+  setCart: (cart) => set({ cart }),
   addToCart: (product: Product) => {
     let discountedPrice: number
     if (product.discount) {

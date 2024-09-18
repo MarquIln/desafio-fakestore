@@ -1,3 +1,4 @@
+import { useCartStore } from '@/context/cart-store'
 import styled from 'styled-components'
 
 interface ModalProps {
@@ -8,7 +9,13 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+  const { setCart } = useCartStore()
   if (!isOpen) return null
+
+  const handleFinishPurchase = () => {
+    setCart([])
+    onClose()
+  }
 
   return (
     <ModalOverlay>
@@ -17,7 +24,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         <ModalBody>{children}</ModalBody>
         <ButtonContainer>
           <CloseButton onClick={onClose}>Fechar</CloseButton>
-          <ConfirmPurchaseButton onClick={onClose}>
+          <ConfirmPurchaseButton onClick={handleFinishPurchase}>
             Confirmar compra
           </ConfirmPurchaseButton>
         </ButtonContainer>
