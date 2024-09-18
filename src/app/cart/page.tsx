@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { CartItem } from '@/components/cart-item'
 import { Header } from '@/components/header'
+import { Modal } from '@/components/modal'
 import { useCartStore } from '@/context/cart-store'
-import { useEffect, useMemo } from 'react'
+import { useFormatTitle } from '@/hooks/use-format-title'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 export default function CartPage() {
@@ -15,14 +18,23 @@ export default function CartPage() {
     }),
   )
 
+  const [showModal, setShowModal] = useState(false)
+
   useEffect(() => {
     loadCartFromLocalStorage()
   }, [loadCartFromLocalStorage])
 
-  const totalItems = useMemo(() => items.length, [items])
+  const totalItems = useMemo(
+    () => items.reduce((total, item) => total + (item.quantity || 0), 0),
+    [items],
+  )
 
   const totalPrice = useMemo(
-    () => items.reduce((total, item) => total + item.price, 0),
+    () =>
+      items.reduce((total, item) => {
+        const price = item.discountedPrice ?? item.price ?? 0
+        return total + price * (item.quantity || 0)
+      }, 0),
     [items],
   )
 
@@ -30,74 +42,133 @@ export default function CartPage() {
     removeFromCart(productId)
   }
 
+  const handleFinalizePurchase = () => {
+    setShowModal(true)
+  }
+
   return (
     <>
       <Header />
-      <CartWrapper>
+      <PageWrapper>
         <h1>Carrinho</h1>
         {items.length > 0 ? (
           <>
             {items.map((product) => (
-              <CartItemWrapper key={product.id}>
-                <CartItem product={product} onRemove={handleRemoveFromCart} />
-              </CartItemWrapper>
+              <CartItem
+                key={product.id}
+                product={product}
+                quantity={product.quantity || 0}
+                onRemove={handleRemoveFromCart}
+              />
             ))}
             <Summary>
-              <p>
+              <SummaryItem>
                 <strong>Total de produtos:</strong> {totalItems}
-              </p>
-              <p>
-                <strong>Preço total:</strong> R$ {totalPrice.toFixed(2)}
-              </p>
+              </SummaryItem>
+              <SummaryItem>
+                <strong>Preço total: </strong>
+                {totalPrice.toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
+              </SummaryItem>
+              <FinalizeButton onClick={handleFinalizePurchase}>
+                Finalizar Compra
+              </FinalizeButton>
             </Summary>
           </>
         ) : (
-          <EmptyCartMessage>Seu carrinho está vazio 😭</EmptyCartMessage>
+          <EmptyCartMessage>Seu carrinho está vazio ainda.</EmptyCartMessage>
         )}
-      </CartWrapper>
+      </PageWrapper>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Confirmação de Compra"
+      >
+        <div>
+          <ul>
+            {items.map((product) => {
+              const displayPrice = product.discountedPrice ?? product.price ?? 0
+
+              return (
+                <li key={product.id}>
+                  {useFormatTitle(
+                    product.brand || 'Marca desconhecida',
+                    product.model || 'Modelo desconhecido',
+                  )}{' '}
+                  - <strong>{product.quantity || 0}</strong> unidade(s) -{' '}
+                  {displayPrice.toLocaleString('pt-br', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}{' '}
+                  cada
+                </li>
+              )
+            })}
+          </ul>
+          <p>
+            <strong>Total de produtos:</strong> {totalItems}
+          </p>
+          <p>
+            <strong>Preço total: </strong>
+            {totalPrice.toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'USD',
+            })}
+          </p>
+        </div>
+      </Modal>
     </>
   )
 }
 
-const CartWrapper = styled.div`
+const PageWrapper = styled.div<{ theme: 'dark' | 'light' }>`
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  color: black;
+  background-color: ${({ theme }) => (theme === 'dark' ? '#333' : '#fff')};
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
 `
 
-const CartItemWrapper = styled.div`
-  margin-bottom: 1rem;
-`
-
-const Summary = styled.div`
+const Summary = styled.div<{ theme: 'dark' | 'light' }>`
   margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: #fff;
+  padding: 1rem;
+  background-color: ${({ theme }) => (theme === 'dark' ? '#444' : '#f9f9f9')};
   border-radius: 8px;
-  color: black;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-size: 1.2rem;
+`
 
-  p {
-    margin: 0.8rem 0;
-    font-weight: bold;
-  }
+const SummaryItem = styled.p`
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+`
 
-  p strong {
-    font-weight: bold;
+const FinalizeButton = styled.button<{ theme: 'dark' | 'light' }>`
+  background-color: ${({ theme }) =>
+    theme === 'dark' ? '#28a745' : '#28a745'};
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#fff')};
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${({ theme }) =>
+      theme === 'dark' ? '#218838' : '#218838'};
   }
 `
 
-const EmptyCartMessage = styled.p`
+const EmptyCartMessage = styled.p<{ theme: 'dark' | 'light' }>`
   text-align: center;
-  font-size: 1.5rem;
-  color: #777;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  font-size: 1.2rem;
+  font-weight: bold;
 `

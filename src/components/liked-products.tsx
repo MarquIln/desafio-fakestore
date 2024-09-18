@@ -42,7 +42,6 @@ export const LikedProducts = ({ product }: LikedProductsProps) => {
 
   return (
     <div>
-      <h2>Produtos similares</h2>
       <ScrollContainer>
         <NavButton onClick={() => scroll('left')}>
           <FaChevronLeft />
@@ -63,7 +62,11 @@ export const LikedProducts = ({ product }: LikedProductsProps) => {
               <ProductTitle>
                 {useFormatTitle(product.brand, product.model)}
               </ProductTitle>
-              <ProductPrice>$ {product.price}</ProductPrice>
+              <ProductPrice>
+                ${' '}
+                {product.price -
+                  (product.price * (product.discount || 0)) / 100}
+              </ProductPrice>
             </ProductCard>
           ))}
         </ProductsWrapper>

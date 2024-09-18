@@ -30,12 +30,19 @@ export const Button = ({
 
 const StyledButton = styled.button`
   background-color: #fd3a3a;
-  color: white;
-  width: 45px;
-  height: 45px;
-  font-size: 16px;
-  cursor: pointer;
-  align-content: center;
-  border: 1px solid #fd3a3a;
+  border: none;
+  padding: 0.5rem 1rem;
   border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e02a2a;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  }
 `

@@ -7,4 +7,6 @@ export interface Product {
   price: number
   description: string
   category: string
+  color: string
+  discount: number | null
 }

@@ -1,17 +1,19 @@
-import { useCartStore } from '@/context/cart-store'
-import { useFormatTitle } from '@/hooks/use-format-title'
-import type { Product } from '@/types/product'
-import Image from 'next/image'
 import styled from 'styled-components'
 import { Button } from './button'
 import { BsCart } from 'react-icons/bs'
+import Image from 'next/image'
+import { useCartStore } from '@/context/cart-store'
+import { useFormatTitle } from '@/hooks/use-format-title'
+import type { Product } from '@/types/product'
+import { DiscountTag } from './discount-tag'
 
 interface CardProps {
   product: Product
   onClick: () => void
+  onAddToCart: (product: Product) => void
 }
 
-export const Card = ({ product, onClick }: CardProps) => {
+export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
   const { addToCart } = useCartStore((state) => ({
     addToCart: state.addToCart,
   }))
@@ -23,70 +25,110 @@ export const Card = ({ product, onClick }: CardProps) => {
 
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
-  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
+    onAddToCart(product)
     addToCart(product)
   }
+
+  const discountedPrice =
+    product.price - (product.price * (product.discount || 0)) / 100
 
   return (
     <CardContainer onClick={onClick}>
       <ImageWrapper>
-        <Image src={product.image} alt="imagem do produto" fill />
+        <Image
+          src={product.image}
+          alt="imagem do produto"
+          layout="cover"
+          width={200}
+          height={200}
+        />
+        {product.discount && product.discount > 0 && (
+          <DiscountTag discount={product.discount} />
+        )}
       </ImageWrapper>
       <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>
       <CardFooter>
-        <Price>{`$${product.price}.00`}</Price>
-        <Button
-          onClick={(event) => handleAddToCart(event, product)}
-          content={<BsCart />}
-        />
+        <PriceContainer>
+          {product.discount && product.discount > 0 && (
+            <OriginalPrice>
+              {product.price.toLocaleString('pt-br', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </OriginalPrice>
+          )}
+          <CurrentPrice hasDiscount={!!product.discount}>
+            {discountedPrice.toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'USD',
+            })}
+          </CurrentPrice>
+        </PriceContainer>
+        <Button onClick={handleAddToCart} content={<BsCart />} />
       </CardFooter>
     </CardContainer>
   )
 }
 
 const CardContainer = styled.div`
-  border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 16px;
-  background-color: #fff;
+  background-color: var(--bg);
   max-width: 300px;
   height: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
-  margin: 10px;
   cursor: pointer;
+
+  @media (max-width: 769px) {
+    margin-left: 20px;
+  }
 `
 
 const ImageWrapper = styled.div`
   position: relative;
   justify-content: center;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 10px;
   overflow: hidden;
+  margin-left: 40px;
+
+  @media (max-width: 769px) {
+    margin-left: 45px;
+  }
 `
 
 const Title = styled.h2`
   font-size: 1rem;
-  margin-bottom: 8px;
-  color: #333;
+  color: var(--headingcolor);
 `
 
 const Description = styled.p`
   font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 16px;
+  color: var(--fg);
 `
 
-const Price = styled.p`
+const PriceContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const OriginalPrice = styled.p`
+  font-size: 1rem;
+  color: var(--fg);
+  text-decoration: line-through;
+  margin-right: 8px;
+`
+
+const CurrentPrice = styled.p<{ hasDiscount: boolean }>`
   font-size: 1.25rem;
   font-weight: bold;
-  color: #050505;
+  color: ${({ hasDiscount }) => (hasDiscount ? 'red' : 'black')};
 `
 
 const CardFooter = styled.div`

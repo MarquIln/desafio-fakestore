@@ -1,93 +1,192 @@
 import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
-import styled from 'styled-components'
 import Image from 'next/image'
-import { TbTrash } from 'react-icons/tb'
+import { FaTrash } from 'react-icons/fa'
+import styled from 'styled-components'
+import { DiscountTag } from './discount-tag'
 
 interface CartItemProps {
   product: Product
+  quantity: number
   onRemove: (id: number) => void
 }
 
-export const CartItem = ({ product, onRemove }: CartItemProps) => {
+export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   const formattedTitle = useFormatTitle(product.brand, product.model)
 
+  const price = Number(product.price) || 0
+  const discount = Number(product.discount) || 0
+  const validQuantity = Number(quantity) || 0
+
+  const totalPrice = price * validQuantity
+
+  let discountedPrice
+  if (discount > 0) {
+    discountedPrice = (price - price * (discount / 100)) * validQuantity
+  }
+
   return (
-    <CartItemContainer>
-      <CartItemDetails>
-        <Image
-          src={product.image}
-          alt={`Imagem do ${product.brand} ${product.model}`}
-          width={100}
-          height={100}
-          style={{ borderRadius: '8px', objectFit: 'cover' }}
-        />
-        <CartItemText>
-          <CartItemTitle>{formattedTitle}</CartItemTitle>
-          <CartItemPrice>
-            {product.price.toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'USD',
-            })}
-          </CartItemPrice>
-        </CartItemText>
+    <CartWrapper>
+      <CartItemWrapper>
+        <ImageWrapper>
+          {discount > 0 && <DiscountTag discount={''} />}
+          <ProductImage
+            src={product.image}
+            alt={product.title}
+            width={100}
+            height={100}
+          />
+        </ImageWrapper>
+        <ProductInfo>
+          <ProductTitle>{formattedTitle}</ProductTitle>
+          <PriceWrapper>
+            <ProductPrice>
+              <span>Preço:</span>{' '}
+              {discount > 0 ? (
+                <>
+                  <OriginalPrice>
+                    {totalPrice.toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </OriginalPrice>
+                  <PriceWithDiscount>
+                    {discountedPrice?.toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </PriceWithDiscount>
+                </>
+              ) : (
+                <BoldPrice>
+                  {totalPrice.toLocaleString('pt-br', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </BoldPrice>
+              )}
+            </ProductPrice>
+          </PriceWrapper>
+          <ProductQuantity>Quantidade: {validQuantity}</ProductQuantity>
+        </ProductInfo>
         <RemoveButton onClick={() => onRemove(product.id)}>
-          <TbTrash />
+          <FaTrash />
         </RemoveButton>
-      </CartItemDetails>
-    </CartItemContainer>
+      </CartItemWrapper>
+    </CartWrapper>
   )
 }
 
-const CartItemContainer = styled.div`
+const CartWrapper = styled.div<{ theme: 'dark' | 'light' }>`
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  background: ${({ theme }) => theme.bg};
+  border-radius: 10px;
+  box-shadow: 0 4px 12px
+    ${({ theme }) =>
+      theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  box-sizing: border-box;
+  overflow-x: auto;
+`
+
+const CartItemWrapper = styled.div`
   display: flex;
-  width: 100%;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0;
-  color: black;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.bg};
+  padding: 1rem;
   border-radius: 8px;
-  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 `
 
-const CartItemDetails = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  align-items: center;
-  width: 100%;
+const ImageWrapper = styled.div`
+  position: relative;
 `
 
-const CartItemText = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-`
-
-const CartItemTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-`
-
-const CartItemPrice = styled.p`
-  font-size: 1.2rem;
-  margin: 5px 0 0;
-  color: #555;
-`
-
-const RemoveButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: #ff6b6b;
-  transition: color 0.3s ease;
-  padding-right: 20px;
+const ProductImage = styled(Image)`
+  transition: transform 0.3s ease;
 
   &:hover {
-    color: #ff4d4d;
+    transform: scale(1.05);
+  }
+`
+
+const ProductInfo = styled.div`
+  flex: 1;
+  margin-left: 1rem;
+  min-width: 0;
+
+  @media (max-width: 600px) {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+`
+
+const ProductTitle = styled.h2<{ theme: 'dark' | 'light' }>`
+  margin: 0;
+  font-size: 1.2rem;
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 600px) {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    max-width: 100%;
+  }
+`
+
+const PriceWrapper = styled.div`
+  margin: 1rem 0;
+`
+
+const ProductPrice = styled.div<{ theme: 'dark' | 'light' }>`
+  font-size: 1rem;
+  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#333')};
+`
+
+const BoldPrice = styled.span`
+  font-weight: bold;
+`
+
+const OriginalPrice = styled.span<{ theme: 'dark' | 'light' }>`
+  text-decoration: line-through;
+  color: ${({ theme }) => (theme === 'dark' ? '#888' : '#888')};
+`
+
+const PriceWithDiscount = styled.span<{ theme: 'dark' | 'light' }>`
+  color: ${({ theme }) => (theme === 'dark' ? '#fd3a3a' : '#fd3a3a')};
+  font-weight: bold;
+  margin-left: 0.5rem;
+`
+
+const ProductQuantity = styled.p<{ theme: 'dark' | 'light' }>`
+  font-size: 1rem;
+  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#333')};
+`
+
+const RemoveButton = styled.button<{ theme: 'dark' | 'light' }>`
+  background: none;
+  border: none;
+  color: ${({ theme }) => (theme === 'dark' ? '#fd3a3a' : '#fd3a3a')};
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: ${({ theme }) => (theme === 'dark' ? '#c9302c' : '#c9302c')};
   }
 `

@@ -1,6 +1,8 @@
-import type { Metadata } from 'next'
+'use client'
+
 import localFont from 'next/font/local'
-import './globals.css'
+import { Providers } from '@/providers/theme-provider'
+import GlobalStyle from './global-styles'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -13,11 +15,6 @@ const geistMono = localFont({
   weight: '100 900',
 })
 
-export const metadata: Metadata = {
-  title: 'FakeStore.com',
-  description: 'Loja de produtos criada para um desafio',
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,7 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <Providers>
+          <GlobalStyle />
+          {children}
+        </Providers>
       </body>
     </html>
   )
