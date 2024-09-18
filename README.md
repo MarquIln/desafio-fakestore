@@ -5,7 +5,7 @@ Bem-vindo ao Fake Product Store, uma loja fictícia criada como um projeto de ex
 
 Para ver a aplicacao online clique no link abaixo:
 
-LINK[https://desafio-fakestore.vercel.app/]
+[LINK](https://desafio-fakestore.vercel.app/)
 
 Começando
 
