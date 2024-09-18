@@ -19,7 +19,7 @@ export const ProductGrid = ({
   return (
     <ProductGridStyle>
       {isLoading
-        ? Array.from({ length: 25 }).map((_, index) => (
+        ? Array.from({ length: 30 }).map((_, index) => (
             <ProductCard key={index}>
               <AllProductsSkeleton />
             </ProductCard>
@@ -41,11 +41,11 @@ export const ProductGridStyle = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   margin-top: 40px;
+  gap: 1rem;
 
   @media (max-width: 600px) {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     justify-content: center;
-    gap: 0.5rem;
     padding: 1rem;
   }
 `

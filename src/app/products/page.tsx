@@ -25,12 +25,21 @@ export default function AllProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [showPopup, setShowPopup] = useState(false)
   const router = useRouter()
-  const totalPages = 7
+  const totalPages = 5
   const { handleScroll } = useScrollToTop(true)
 
   const getProducts = useCallback(async () => {
     setIsLoading(true)
     try {
+      if (selectedCategory && keyword) {
+        const response = await fetchProductByCategory(selectedCategory)
+        const filteredProducts = response.filter((product: Product) =>
+          product.title.toLowerCase().includes(keyword.toLowerCase()),
+        )
+        setProducts(filteredProducts)
+        return
+      }
+
       if (selectedCategory) {
         const response = await fetchProductByCategory(selectedCategory)
         setProducts(response)

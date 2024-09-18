@@ -86,14 +86,12 @@ const ImageWrapper = styled.div`
 
 const Title = styled.h2`
   font-size: 1rem;
-  margin-bottom: 8px;
   color: var(--headingcolor);
 `
 
 const Description = styled.p`
   font-size: 0.8rem;
   color: var(--fg);
-  margin-bottom: 16px;
 `
 
 const Price = styled.p`

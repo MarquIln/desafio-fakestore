@@ -1,6 +1,6 @@
 import { useProductStore } from '@/context/product-store'
 import { fetchAllCategories } from '@/services/api'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 
@@ -15,6 +15,7 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
   const { activatedCategory, setActivatedCategory } = useProductStore(
     (state) => state,
   )
+  const filterRef = useRef<HTMLDivElement>(null)
 
   const getAllCategories = async () => {
     const categories = await fetchAllCategories()
@@ -23,6 +24,22 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
 
   useEffect(() => {
     getAllCategories()
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   const handleCategorySelect = (category: string) => {
@@ -38,7 +55,7 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
   }
 
   return (
-    <FilterContainer>
+    <FilterContainer ref={filterRef}>
       <DropdownButton
         active={!!activatedCategory}
         onClick={() => setIsOpen(!isOpen)}
