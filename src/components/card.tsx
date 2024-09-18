@@ -133,6 +133,6 @@ const CurrentPrice = styled.p<{ hasDiscount: boolean }>`
 
 const CardFooter = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 `
