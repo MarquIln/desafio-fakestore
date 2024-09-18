@@ -11,9 +11,8 @@ export const CategoriesSlider = ({
   onCategoryChange,
 }: CategoriesSliderProps) => {
   const [categories, setCategories] = useState<string[]>([])
-  const { activatedCategory, setActivatedCategory } = useProductStore(
-    (state) => state,
-  )
+  const { activatedCategory, setActivatedCategory, setKeyword } =
+    useProductStore((state) => state)
 
   const getAllCategories = async () => {
     const categories = await fetchAllCategories()
@@ -29,6 +28,7 @@ export const CategoriesSlider = ({
 
     setActivatedCategory(category)
     onCategoryChange(category)
+    setKeyword('')
   }
 
   useEffect(() => {

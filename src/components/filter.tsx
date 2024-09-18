@@ -12,9 +12,8 @@ interface FilterProps {
 export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
-  const { activatedCategory, setActivatedCategory } = useProductStore(
-    (state) => state,
-  )
+  const { activatedCategory, setActivatedCategory, setKeyword } =
+    useProductStore((state) => state)
   const filterRef = useRef<HTMLDivElement>(null)
 
   const getAllCategories = async () => {
@@ -45,6 +44,7 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
   const handleCategorySelect = (category: string) => {
     setActivatedCategory(category)
     onCategoryChange(category)
+    setKeyword('')
     setIsOpen(false)
   }
 

@@ -6,6 +6,7 @@ import { PageNumbers } from '@/components/page-numbers'
 import { ChangePageButton, Pagination } from '@/components/pagination'
 import { PopUp } from '@/components/pop-up'
 import { ProductGrid } from '@/components/product-grid'
+import { useProductStore } from '@/context/product-store'
 import { useScrollToTop } from '@/hooks/use-scroll-up'
 import {
   fetchAllProducts,
@@ -21,8 +22,8 @@ export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [page, setPage] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(true)
-  const [keyword, setKeyword] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const { keyword, setKeyword, activatedCategory, setActivatedCategory } =
+    useProductStore((state) => state)
   const [showPopup, setShowPopup] = useState(false)
   const router = useRouter()
   const totalPages = 5
@@ -31,8 +32,8 @@ export default function AllProductsPage() {
   const getProducts = useCallback(async () => {
     setIsLoading(true)
     try {
-      if (selectedCategory && keyword) {
-        const response = await fetchProductByCategory(selectedCategory)
+      if (activatedCategory && keyword) {
+        const response = await fetchProductByCategory(activatedCategory)
         const filteredProducts = response.filter((product: Product) =>
           product.title.toLowerCase().includes(keyword.toLowerCase()),
         )
@@ -40,8 +41,8 @@ export default function AllProductsPage() {
         return
       }
 
-      if (selectedCategory) {
-        const response = await fetchProductByCategory(selectedCategory)
+      if (activatedCategory) {
+        const response = await fetchProductByCategory(activatedCategory)
         setProducts(response)
         return
       }
@@ -67,7 +68,7 @@ export default function AllProductsPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [page, keyword, selectedCategory])
+  }, [page, keyword, activatedCategory])
 
   useEffect(() => {
     getProducts()
@@ -111,16 +112,16 @@ export default function AllProductsPage() {
     <div>
       <Header
         onKeywordChange={setKeyword}
-        onCategoryChange={setSelectedCategory}
+        onCategoryChange={setActivatedCategory}
       />
-      <CategoriesSlider onCategoryChange={setSelectedCategory} />
+      <CategoriesSlider onCategoryChange={setActivatedCategory} />
       <ProductGrid
         products={products}
         onProductClick={goToProductPage}
         onAddToCart={showAddToCartPopup}
         isLoading={isLoading}
       />
-      {!keyword && !selectedCategory && (
+      {!keyword && !activatedCategory && (
         <Pagination>
           <ChangePageButton onClick={handlePreviousPage} disabled={page === 1}>
             <FaArrowCircleLeft color={'#fd3a3a'} />
@@ -129,8 +130,8 @@ export default function AllProductsPage() {
             page={page}
             totalPages={totalPages}
             onPageClick={handlePageClick}
-            keyword={keyword}
-            selectedCategory={selectedCategory}
+            keyword={keyword || ''}
+            selectedCategory={activatedCategory}
           />
           <ChangePageButton
             onClick={handleNextPage}

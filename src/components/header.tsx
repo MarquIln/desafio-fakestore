@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { Filter } from './filter'
 import { SearchBar } from './search-bar'
 import { Sidebar } from './sidebar'
+import { useProductStore } from '@/context/product-store'
 
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
@@ -19,7 +20,7 @@ export const Header = ({
   disableFilters = false,
 }: HeaderProps) => {
   const router = useRouter()
-  const [keyword, setKeyword] = useState('')
+  const { keyword, setKeyword } = useProductStore()
   const { cart } = useCartStore()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0)
