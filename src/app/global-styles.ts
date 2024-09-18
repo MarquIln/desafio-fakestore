@@ -19,8 +19,8 @@ const GlobalStyle = createGlobalStyle`
     }
 
     :root {
-        --bg: #ffffff; /* Light theme default */
-        --fg: #000000; /* Light theme default */
+        --bg: #ffffff; 
+        --fg: #000000; 
         --headingcolor: #6767b3;
         --primary-button-bgcolor: #f26828;
         --primary-button-hovercolor: #f69f77;
@@ -31,16 +31,29 @@ const GlobalStyle = createGlobalStyle`
     }
 
     [data-theme='dark'] {
-        --bg: #362d2d;
-        --fg: #ffffff;
-        --headingcolor: #eded1b;
-        --primary-button-bgcolor: #F59E0B;
-        --primary-button-hovercolor: #f1af3d;
-        --primary-button-textcolor: #121212;
-        --secondary-button-bgcolor: #ffffff;
-        --secondary-button-hovercolor: #fafafa;
-        --secondary-button-textcolor: #121212;
-    }
+    --bg: #27272a;
+    --fg: #ffffff;
+    --headingcolor: #ffffff;
+    --primary-button-bgcolor: #fd3a3a;
+    --primary-button-hovercolor: #ccc;
+    --primary-button-textcolor: #ffffff;
+    --secondary-button-bgcolor: #333333;
+    --secondary-button-hovercolor: #1a1a1a;
+    --secondary-button-textcolor: #ffffff;
+}
+
+[data-theme='light'] {
+    --bg: #ffffff; 
+    --fg: #000000; 
+    --headingcolor: #333333; 
+    --primary-button-bgcolor: #fd3a3a; 
+    --primary-button-hovercolor: #dd3232; 
+    --primary-button-textcolor: #ffffff; 
+    --secondary-button-bgcolor: #ffffff; 
+    --secondary-button-hovercolor: #f2f2f2; 
+    --secondary-button-textcolor: #000000; 
+}
+
 
     body {
         background-color: var(--bg);

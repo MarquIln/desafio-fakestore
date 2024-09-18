@@ -20,9 +20,9 @@ export const ChangeTheme = () => {
   return (
     <ThemeToggleContainer>
       {resolvedTheme === 'dark' ? (
-        <SunIcon size={30} onClick={handleThemeChange} />
+        <SunIcon size={24} onClick={handleThemeChange} />
       ) : (
-        <MoonIcon size={30} onClick={handleThemeChange} />
+        <MoonIcon size={24} onClick={handleThemeChange} />
       )}
     </ThemeToggleContainer>
   )
@@ -37,8 +37,10 @@ const ThemeToggleContainer = styled.div`
 
 const SunIcon = styled(TbSunFilled)`
   color: #fd3a3a;
+  align-items: center;
 `
 
 const MoonIcon = styled(TbMoonFilled)`
   color: #fd3a3a;
+  align-items: center;
 `

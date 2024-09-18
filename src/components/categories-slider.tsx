@@ -6,6 +6,7 @@ import styled from 'styled-components'
 interface CategoriesSliderProps {
   onCategoryChange: (category: string) => void
 }
+
 export const CategoriesSlider = ({
   onCategoryChange,
 }: CategoriesSliderProps) => {
@@ -42,6 +43,7 @@ export const CategoriesSlider = ({
             key={category}
             isActive={activatedCategory === category}
             onClick={() => handleCategorySelect(category)}
+            aria-label={`Select category ${category}`}
           >
             {category}
           </Category>
@@ -52,7 +54,7 @@ export const CategoriesSlider = ({
 }
 
 const SliderContainer = styled.div`
-  padding: 1rem 1rem 0rem 1rem;
+  padding: 1rem;
 `
 
 const Slider = styled.div`
@@ -67,9 +69,11 @@ interface CategoryProps {
 
 const Category = styled.button<CategoryProps>`
   flex-grow: 1;
-  padding: 0.5rem 0rem;
-  background: ${({ isActive }) => (isActive ? '#fd3a3a' : '#e9e9e9')};
-  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+  padding: 0.5rem;
+  background: ${({ isActive, theme }) =>
+    isActive ? '#fd3a3a' : theme.inactiveBackground};
+  color: ${({ isActive, theme }) =>
+    isActive ? '#fff' : theme.inactiveTextColor};
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -77,6 +81,7 @@ const Category = styled.button<CategoryProps>`
   text-transform: capitalize;
 
   &:hover {
-    background: ${({ isActive }) => (isActive ? '#dd3333' : '#e9e9e9')};
+    background: ${({ isActive, theme }) =>
+      isActive ? theme.activeHoverBackground : theme.inactiveHoverBackground};
   }
 `

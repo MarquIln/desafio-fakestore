@@ -15,10 +15,12 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       <ModalContent>
         <ModalTitle>{title}</ModalTitle>
         <ModalBody>{children}</ModalBody>
-        <CloseButton onClick={onClose}>Fechar</CloseButton>
-        <ConfirmPurchaseButton onClick={onClose}>
-          Confirmar compra
-        </ConfirmPurchaseButton>
+        <ButtonContainer>
+          <CloseButton onClick={onClose}>Fechar</CloseButton>
+          <ConfirmPurchaseButton onClick={onClose}>
+            Confirmar compra
+          </ConfirmPurchaseButton>
+        </ButtonContainer>
       </ModalContent>
     </ModalOverlay>
   )
@@ -38,7 +40,8 @@ const ModalOverlay = styled.div`
 `
 
 const ModalContent = styled.div`
-  background: white;
+  background: #ffffff;
+  color: #333333;
   padding: 30px;
   border-radius: 8px;
   max-width: 500px;
@@ -49,21 +52,25 @@ const ModalContent = styled.div`
 const ModalTitle = styled.h2`
   font-size: 1.8rem;
   margin-bottom: 20px;
-  color: #333;
   font-weight: bold;
 `
 
 const ModalBody = styled.div`
   font-size: 1.2rem;
-  color: #555;
   margin-bottom: 30px;
   line-height: 1.5;
 `
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+`
+
 const CloseButton = styled.button`
   padding: 10px 20px;
-  background-color: #fd3a3a;
-  color: white;
+  background-color: #d9534f;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -71,14 +78,14 @@ const CloseButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #dd3232;
+    background-color: #c9302c;
   }
 `
 
 const ConfirmPurchaseButton = styled.button`
   padding: 10px 20px;
   background-color: #28a745;
-  color: white;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   font-size: 1rem;

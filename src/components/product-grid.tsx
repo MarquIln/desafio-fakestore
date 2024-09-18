@@ -19,7 +19,7 @@ export const ProductGrid = ({
   return (
     <ProductGridStyle>
       {isLoading
-        ? Array.from({ length: 24 }).map((_, index) => (
+        ? Array.from({ length: 25 }).map((_, index) => (
             <ProductCard key={index}>
               <AllProductsSkeleton />
             </ProductCard>
@@ -54,7 +54,7 @@ export const ProductCard = styled.div`
   flex: 1 1 320px;
   box-sizing: border-box;
   padding: 0.75rem;
-  background: #fff;
+  background: ${({ theme }) => theme.bg};
   border-radius: 10px;
   transition:
     transform 0.2s ease,

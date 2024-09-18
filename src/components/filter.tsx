@@ -43,8 +43,10 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
         active={!!activatedCategory}
         onClick={() => setIsOpen(!isOpen)}
         isSidebar={isSidebar}
+        aria-expanded={isOpen}
+        aria-label="Filter categories"
       >
-        {isSidebar && <span>Filtros</span>}{' '}
+        {isSidebar && <span>Filtros</span>}
         <FaFilter style={{ marginLeft: isSidebar ? '8px' : '0' }} />
       </DropdownButton>
 
@@ -53,11 +55,12 @@ export const Filter = ({ onCategoryChange, isSidebar }: FilterProps) => {
           <DropdownItem
             key={category}
             onClick={() => handleCategorySelect(category)}
+            aria-label={`Select category ${category}`}
           >
             {category}
           </DropdownItem>
         ))}
-        <DropdownReset onClick={handleResetFilter}>
+        <DropdownReset onClick={handleResetFilter} aria-label="Remove filter">
           Remover filtro
         </DropdownReset>
       </DropdownContent>
@@ -81,16 +84,15 @@ const DropdownButton = styled.button<{ active: boolean; isSidebar?: boolean }>`
   display: flex;
   align-items: center;
 
-  /* No computador, esconda o texto e mostre apenas o ícone */
-  ${(props) =>
-    !props.isSidebar &&
-    `
-    @media (min-width: 600px) {
+  @media (min-width: 600px) {
+    ${(props) =>
+      !props.isSidebar &&
+      `
       span {
         display: none;
       }
-    }
-  `}
+    `}
+  }
 `
 
 const DropdownContent = styled.div<{ open: boolean }>`
@@ -122,6 +124,7 @@ const DropdownReset = styled.div`
   color: #fd3a3a;
   border: 1px solid white;
   border-radius: 4px;
+
   &:hover {
     background-color: #fa9797;
   }

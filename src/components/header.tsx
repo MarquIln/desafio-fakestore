@@ -1,8 +1,6 @@
-'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { BsCart } from 'react-icons/bs'
+import { FaCartShopping } from 'react-icons/fa6'
 import styled from 'styled-components'
 import { SearchBar } from './search-bar'
 import { Filter } from './filter'
@@ -50,21 +48,28 @@ export const Header = ({
           disableFilters={disableFilters}
         />
         <Logo onClick={() => router.push('/')}>FakeStore</Logo>
-        <FiltersDesktop>
-          <SearchBar keyword={keyword} onKeywordChange={handleKeywordChange} />
-          {!disableFilters && (
-            <Filter
-              onCategoryChange={(category) => {
-                if (onCategoryChange) onCategoryChange(category)
-              }}
+        <ContentWrapper>
+          <FiltersDesktop>
+            <SearchBar
+              keyword={keyword}
+              onKeywordChange={handleKeywordChange}
             />
-          )}
-        </FiltersDesktop>
-        <ChangeTheme />
-        <Cart onClick={() => router.push('/cart')}>
-          <BsCart />
-          {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}
-        </Cart>
+            {!disableFilters && (
+              <Filter
+                onCategoryChange={(category) => {
+                  if (onCategoryChange) onCategoryChange(category)
+                }}
+              />
+            )}
+          </FiltersDesktop>
+        </ContentWrapper>
+        <RightSection>
+          <ChangeTheme />
+          <Cart onClick={() => router.push('/cart')}>
+            <FaCartShopping color="#fd3a3a" size={30} />
+            {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}
+          </Cart>
+        </RightSection>
       </StyledHeader>
     </>
   )
@@ -72,8 +77,8 @@ export const Header = ({
 
 const StyledHeader = styled.header`
   padding: 10px 20px;
-  background-color: white;
-  color: black;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.fg};
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -94,15 +99,16 @@ const Cart = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  color: #fd3a3a;
+  color: ${({ theme }) => theme.primaryButtonBgColor};
+  align-items: center;
 `
 
 const CartQuantity = styled.span`
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   right: 10px;
   background-color: #fd3a3a;
-  color: white;
+  color: #ffffff;
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -120,4 +126,17 @@ const FiltersDesktop = styled.div`
   @media (min-width: 769px) {
     display: flex;
   }
+`
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 20px;
+`
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
 `

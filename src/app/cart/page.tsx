@@ -62,16 +62,16 @@ export default function CartPage() {
               />
             ))}
             <Summary>
-              <p>
+              <SummaryItem>
                 <strong>Total de produtos:</strong> {totalItems}
-              </p>
-              <p>
+              </SummaryItem>
+              <SummaryItem>
                 <strong>Preço total: </strong>
                 {totalPrice.toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'USD',
                 })}
-              </p>
+              </SummaryItem>
               <FinalizeButton onClick={handleFinalizePurchase}>
                 Finalizar Compra
               </FinalizeButton>
@@ -123,53 +123,52 @@ export default function CartPage() {
   )
 }
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.div<{ theme: 'dark' | 'light' }>`
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
   border-radius: 10px;
-  color: black;
+  background-color: ${({ theme }) => (theme === 'dark' ? '#333' : '#fff')};
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
 `
 
-const Summary = styled.div`
+const Summary = styled.div<{ theme: 'dark' | 'light' }>`
   margin-top: 2rem;
-  padding: 1.5rem;
+  padding: 1rem;
+  background-color: ${({ theme }) => (theme === 'dark' ? '#444' : '#f9f9f9')};
   border-radius: 8px;
-  color: black;
-  font-size: 1.2rem;
-
-  p {
-    margin: 0.8rem 0;
-    font-weight: bold;
-  }
-
-  p strong {
-    font-weight: bold;
-  }
 `
 
-const EmptyCartMessage = styled.p`
-  text-align: center;
-  font-size: 1.5rem;
-  color: #777;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+const SummaryItem = styled.p`
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
 `
 
-const FinalizeButton = styled.button`
-  margin-top: 20px;
-  padding: 12px 20px;
-  background-color: #28a745;
-  color: white;
+const FinalizeButton = styled.button<{ theme: 'dark' | 'light' }>`
+  background-color: ${({ theme }) =>
+    theme === 'dark' ? '#28a745' : '#28a745'};
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#fff')};
   border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
+  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 
   &:hover {
-    background-color: #218838;
+    background-color: ${({ theme }) =>
+      theme === 'dark' ? '#218838' : '#218838'};
   }
+`
+
+const EmptyCartMessage = styled.p<{ theme: 'dark' | 'light' }>`
+  text-align: center;
+  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  font-size: 1.2rem;
+  font-weight: bold;
 `

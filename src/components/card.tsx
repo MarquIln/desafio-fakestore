@@ -1,10 +1,10 @@
-import { useCartStore } from '@/context/cart-store'
-import { useFormatTitle } from '@/hooks/use-format-title'
-import type { Product } from '@/types/product'
-import Image from 'next/image'
 import styled from 'styled-components'
 import { Button } from './button'
 import { BsCart } from 'react-icons/bs'
+import Image from 'next/image'
+import { useCartStore } from '@/context/cart-store'
+import { useFormatTitle } from '@/hooks/use-format-title'
+import type { Product } from '@/types/product'
 
 interface CardProps {
   product: Product
@@ -56,19 +56,17 @@ export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
 }
 
 const CardContainer = styled.div`
-  border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 16px;
-  background-color: #fff;
+  background-color: var(--bg);
   max-width: 300px;
   height: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
-  margin: 10px;
   cursor: pointer;
+  margin-left: 20px;
+  margin-right: 20px;
 `
 
 const ImageWrapper = styled.div`
@@ -88,19 +86,19 @@ const ImageWrapper = styled.div`
 const Title = styled.h2`
   font-size: 1rem;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--headingcolor);
 `
 
 const Description = styled.p`
   font-size: 0.8rem;
-  color: #666;
+  color: var(--fg);
   margin-bottom: 16px;
 `
 
 const Price = styled.p`
   font-size: 1.25rem;
   font-weight: bold;
-  color: #050505;
+  color: var(--fg);
 `
 
 const CardFooter = styled.div`

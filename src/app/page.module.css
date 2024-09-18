@@ -1,4 +1,3 @@
-
 html.light {
   --background-color: #ffffff;
   --text-color: #000000;
@@ -10,7 +9,7 @@ html.light {
 }
 
 html.dark {
-  --background-color: #362d2d;
+  --background-color: #000000;
   --text-color: #ffffff;
   --gray-rgb: 255, 255, 255;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
