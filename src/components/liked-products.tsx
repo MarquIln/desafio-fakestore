@@ -42,7 +42,6 @@ export const LikedProducts = ({ product }: LikedProductsProps) => {
 
   return (
     <div>
-      <h2>Produtos similares</h2>
       <ScrollContainer>
         <NavButton onClick={() => scroll('left')}>
           <FaChevronLeft />
