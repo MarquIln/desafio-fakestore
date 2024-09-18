@@ -62,7 +62,11 @@ export const LikedProducts = ({ product }: LikedProductsProps) => {
               <ProductTitle>
                 {useFormatTitle(product.brand, product.model)}
               </ProductTitle>
-              <ProductPrice>$ {product.price}</ProductPrice>
+              <ProductPrice>
+                ${' '}
+                {product.price -
+                  (product.price * (product.discount || 0)) / 100}
+              </ProductPrice>
             </ProductCard>
           ))}
         </ProductsWrapper>
