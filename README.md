@@ -3,6 +3,10 @@ Fake Product Store
 
 Bem-vindo ao Fake Product Store, uma loja fictícia criada como um projeto de exemplo utilizando Next.js. Este aplicativo demonstra como construir uma loja online com Next.js, incluindo funcionalidades como um carrinho de compras, listagem de produtos e uma interface moderna.
 
+Para ver a aplicacao online clique no link abaixo:
+
+LINK[https://desafio-fakestore.vercel.app/]
+
 Começando
 
 Siga as instruções abaixo para rodar o projeto localmente.
