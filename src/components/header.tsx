@@ -47,7 +47,14 @@ export const Header = ({
           onCategoryChange={onCategoryChange}
           disableFilters={disableFilters}
         />
-        <Logo onClick={() => router.push('/')}>FakeStore</Logo>
+        <Logo
+          onClick={() => {
+            setKeyword('')
+            router.push('/')
+          }}
+        >
+          FakeStore
+        </Logo>
         <ContentWrapper>
           <FiltersDesktop>
             <SearchBar
