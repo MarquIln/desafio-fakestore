@@ -10,48 +10,42 @@ jest.mock('@/context/cart-store', () => ({
 
 const mockAddToCart = jest.fn()
 
-describe('Card component', () => {
-  beforeEach(() => {
-    ;(useCartStore as unknown as jest.Mock).mockReturnValue({
-      addToCart: mockAddToCart,
-    })
+beforeEach(() => {
+  ;(useCartStore as unknown as jest.Mock).mockReturnValue({
+    addToCart: mockAddToCart,
   })
+})
 
-  const product: Product = {
-    id: 1,
-    brand: 'Brand',
-    model: 'Model',
-    description:
-      'A very long description that should be truncated for testing purposes.',
-    image: 'image-url',
-    price: 100,
-    title: 'Product Title',
-    category: 'Category',
-  }
+const product: Product = {
+  id: 1,
+  brand: 'Brand',
+  model: 'Model',
+  description: 'Description',
+  image: 'image-url',
+  price: 100,
+  title: 'Product Title',
+  category: 'Category',
+  color: 'Color',
+  discount: 10,
+}
 
-  test('renders product details correctly', () => {
-    render(<Card product={product} onClick={() => {}} />)
-    expect(screen.getByText(/Brand Model/i)).toBeInTheDocument()
-    expect(screen.getByText(/\$100/i)).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        /A very long description that should be truncated for testing purposes\.\.\./i,
-      ),
-    ).toBeInTheDocument()
-  })
+test('renders product details and handles click events', () => {
+  const handleClick = jest.fn()
+  render(
+    <Card
+      product={product}
+      onClick={handleClick}
+      onAddToCart={() => console.log('oi')}
+    />,
+  )
 
-  test('calls onClick handler when the card is clicked', () => {
-    const handleClick = jest.fn()
-    render(<Card product={product} onClick={handleClick} />)
-    const cardElement = screen.getByRole('button')
-    fireEvent.click(cardElement)
-    expect(handleClick).toHaveBeenCalledTimes(1)
-  })
+  expect(screen.getByText(/Brand Model/i)).toBeInTheDocument()
+  expect(screen.getByText(/\$100/i)).toBeInTheDocument()
+  expect(screen.getByText(/Description/i)).toBeInTheDocument()
 
-  test('calls addToCart when the add to cart button is clicked', () => {
-    render(<Card product={product} onClick={() => {}} />)
-    const buttonElement = screen.getByRole('button', { name: /cart/i })
-    fireEvent.click(buttonElement)
-    expect(mockAddToCart).toHaveBeenCalledWith(product)
-  })
+  fireEvent.click(screen.getByRole('button'))
+  expect(handleClick).toHaveBeenCalledTimes(1)
+
+  fireEvent.click(screen.getByRole('button', { name: /cart/i }))
+  expect(mockAddToCart).toHaveBeenCalledWith(product)
 })

@@ -1,4 +1,10 @@
 import { createGlobalStyle } from 'styled-components'
+import { Inter } from '@next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -11,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         max-width: 100vw;
         overflow-x: hidden;
+        font-family: var(--font-inter), sans-serif;
     }
 
     a {
@@ -28,32 +35,33 @@ const GlobalStyle = createGlobalStyle`
         --secondary-button-bgcolor: #121212;
         --secondary-button-hovercolor: #6a6666;
         --secondary-button-textcolor: #ffffff;
+
+        --font-inter: ${inter.variable};
     }
 
     [data-theme='dark'] {
-    --bg: #27272a;
-    --fg: #ffffff;
-    --headingcolor: #ffffff;
-    --primary-button-bgcolor: #fd3a3a;
-    --primary-button-hovercolor: #ccc;
-    --primary-button-textcolor: #ffffff;
-    --secondary-button-bgcolor: #333333;
-    --secondary-button-hovercolor: #1a1a1a;
-    --secondary-button-textcolor: #ffffff;
-}
+        --bg: #27272a;
+        --fg: #ffffff;
+        --headingcolor: #ffffff;
+        --primary-button-bgcolor: #fd3a3a;
+        --primary-button-hovercolor: #ccc;
+        --primary-button-textcolor: #ffffff;
+        --secondary-button-bgcolor: #333333;
+        --secondary-button-hovercolor: #1a1a1a;
+        --secondary-button-textcolor: #ffffff;
+    }
 
-[data-theme='light'] {
-    --bg: #ffffff; 
-    --fg: #000000; 
-    --headingcolor: #333333; 
-    --primary-button-bgcolor: #fd3a3a; 
-    --primary-button-hovercolor: #dd3232; 
-    --primary-button-textcolor: #ffffff; 
-    --secondary-button-bgcolor: #ffffff; 
-    --secondary-button-hovercolor: #f2f2f2; 
-    --secondary-button-textcolor: #000000; 
-}
-
+    [data-theme='light'] {
+        --bg: #ffffff; 
+        --fg: #000000; 
+        --headingcolor: #333333; 
+        --primary-button-bgcolor: #fd3a3a; 
+        --primary-button-hovercolor: #dd3232; 
+        --primary-button-textcolor: #ffffff; 
+        --secondary-button-bgcolor: #ffffff; 
+        --secondary-button-hovercolor: #f2f2f2; 
+        --secondary-button-textcolor: #000000; 
+    }
 
     body {
         background-color: var(--bg);
