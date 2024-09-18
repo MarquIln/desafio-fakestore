@@ -83,8 +83,6 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
-  margin-left: 20px;
-  margin-right: 20px;
 `
 
 const ImageWrapper = styled.div`
@@ -131,6 +129,6 @@ const CurrentPrice = styled.p<{ hasDiscount: boolean }>`
 
 const CardFooter = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 `
