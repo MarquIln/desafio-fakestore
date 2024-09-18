@@ -19,21 +19,25 @@ export const ProductGrid = ({
   return (
     <Container>
       <ProductGridStyle maxWidth="100%">
-        {isLoading
-          ? Array.from({ length: 30 }).map((_, index) => (
-              <ProductCard key={index}>
-                <AllProductsSkeleton />
-              </ProductCard>
-            ))
-          : products.map((product: Product) => (
-              <ProductCard key={product.id}>
-                <Card
-                  product={product}
-                  onClick={() => onProductClick(product.id)}
-                  onAddToCart={onAddToCart}
-                />
-              </ProductCard>
-            ))}
+        {isLoading ? (
+          Array.from({ length: 30 }).map((_, index) => (
+            <ProductCard key={index}>
+              <AllProductsSkeleton />
+            </ProductCard>
+          ))
+        ) : products.length === 0 ? (
+          <NoProductsMessage>Nenhum produto encontrado.</NoProductsMessage>
+        ) : (
+          products.map((product: Product) => (
+            <ProductCard key={product.id}>
+              <Card
+                product={product}
+                onClick={() => onProductClick(product.id)}
+                onAddToCart={onAddToCart}
+              />
+            </ProductCard>
+          ))
+        )}
       </ProductGridStyle>
     </Container>
   )
@@ -52,7 +56,6 @@ const ProductGridStyle = styled.div<{ maxWidth: string }>`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
-  margin-top: 40px;
   justify-content: center;
 
   max-width: ${({ maxWidth }) => maxWidth};
@@ -63,7 +66,7 @@ const ProductGridStyle = styled.div<{ maxWidth: string }>`
   }
 `
 
-export const ProductCard = styled.div`
+const ProductCard = styled.div`
   box-sizing: border-box;
   padding: 0.75rem;
   background: ${({ theme }) => theme.bg};
@@ -81,4 +84,12 @@ export const ProductCard = styled.div`
   @media (max-width: 600px) {
     max-width: 100%;
   }
+`
+
+const NoProductsMessage = styled.div`
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px 20px;
+  color: #000;
+  font-size: 1.5rem;
 `

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useCartStore } from '@/context/cart-store'
 import { useFormatTitle } from '@/hooks/use-format-title'
 import type { Product } from '@/types/product'
+import { DiscountTag } from './discount-tag'
 
 interface CardProps {
   product: Product
@@ -30,6 +31,9 @@ export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
     addToCart(product)
   }
 
+  const discountedPrice =
+    product.price - (product.price * (product.discount || 0)) / 100
+
   return (
     <CardContainer onClick={onClick}>
       <ImageWrapper>
@@ -40,16 +44,29 @@ export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
           width={200}
           height={200}
         />
+        {product.discount && product.discount > 0 && (
+          <DiscountTag discount={product.discount} />
+        )}
       </ImageWrapper>
       <Title>{formattedTitle}</Title>
       <Description>{maxDescriptionLength}...</Description>
       <CardFooter>
-        <Price>
-          {product.price.toLocaleString('pt-br', {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </Price>
+        <PriceContainer>
+          {product.discount && product.discount > 0 && (
+            <OriginalPrice>
+              {product.price.toLocaleString('pt-br', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </OriginalPrice>
+          )}
+          <CurrentPrice hasDiscount={!!product.discount}>
+            {discountedPrice.toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'USD',
+            })}
+          </CurrentPrice>
+        </PriceContainer>
         <Button onClick={handleAddToCart} content={<BsCart />} />
       </CardFooter>
     </CardContainer>
@@ -94,10 +111,22 @@ const Description = styled.p`
   color: var(--fg);
 `
 
-const Price = styled.p`
+const PriceContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const OriginalPrice = styled.p`
+  font-size: 1rem;
+  color: var(--fg);
+  text-decoration: line-through;
+  margin-right: 8px;
+`
+
+const CurrentPrice = styled.p<{ hasDiscount: boolean }>`
   font-size: 1.25rem;
   font-weight: bold;
-  color: var(--fg);
+  color: ${({ hasDiscount }) => (hasDiscount ? 'red' : 'black')};
 `
 
 const CardFooter = styled.div`

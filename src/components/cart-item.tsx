@@ -3,6 +3,7 @@ import type { Product } from '@/types/product'
 import Image from 'next/image'
 import { FaTrash } from 'react-icons/fa'
 import styled from 'styled-components'
+import { DiscountTag } from './discount-tag'
 
 interface CartItemProps {
   product: Product
@@ -27,12 +28,15 @@ export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   return (
     <CartWrapper>
       <CartItemWrapper>
-        <ProductImage
-          src={product.image}
-          alt={product.title}
-          width={100}
-          height={100}
-        />
+        <ImageWrapper>
+          {discount > 0 && <DiscountTag discount={''} />}
+          <ProductImage
+            src={product.image}
+            alt={product.title}
+            width={100}
+            height={100}
+          />
+        </ImageWrapper>
         <ProductInfo>
           <ProductTitle>{formattedTitle}</ProductTitle>
           <PriceWrapper>
@@ -106,7 +110,11 @@ const CartItemWrapper = styled.div`
   }
 `
 
-export const ProductImage = styled(Image)`
+const ImageWrapper = styled.div`
+  position: relative;
+`
+
+const ProductImage = styled(Image)`
   transition: transform 0.3s ease;
 
   &:hover {
@@ -132,6 +140,13 @@ const ProductTitle = styled.h2<{ theme: 'dark' | 'light' }>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (max-width: 600px) {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    max-width: 100%;
+  }
 `
 
 const PriceWrapper = styled.div`

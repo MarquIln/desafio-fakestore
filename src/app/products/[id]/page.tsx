@@ -10,15 +10,17 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PopUp } from '@/components/pop-up'
 import { ProductDetails } from '@/components/product-details'
+import { CategoriesSlider } from '@/components/categories-slider'
+import { useRouter } from 'next/navigation'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
-  const { product, fetchProductById } = useProductStore((state) => ({
-    product: state.product,
-    fetchProductById: state.fetchProductById,
-  }))
+  const { product, fetchProductById, setKeyword, setActivatedCategory } =
+    useProductStore((state) => state)
   const { addToCart } = useCartStore((state) => ({
     addToCart: state.addToCart,
   }))
+
+  const router = useRouter()
 
   const [loading, setLoading] = useState(true)
   const [showPopUp, setShowPopUp] = useState(false)
@@ -40,6 +42,13 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <Header />
+      <CategoriesSlider
+        onCategoryChange={(category) => {
+          setKeyword('')
+          setActivatedCategory(category)
+          router.push('/')
+        }}
+      />
       {loading ? (
         <ProductPageSkeleton />
       ) : product ? (

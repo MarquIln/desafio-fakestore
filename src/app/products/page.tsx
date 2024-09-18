@@ -90,6 +90,8 @@ export default function AllProductsPage() {
 
   const goToProductPage = (id: number) => {
     router.push(`/products/${id}`)
+    setActivatedCategory('')
+    setKeyword('')
   }
 
   const handlePageClick = useCallback(
