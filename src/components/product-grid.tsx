@@ -17,41 +17,53 @@ export const ProductGrid = ({
   isLoading,
 }: ProductGridProps) => {
   return (
-    <ProductGridStyle>
-      {isLoading
-        ? Array.from({ length: 30 }).map((_, index) => (
-            <ProductCard key={index}>
-              <AllProductsSkeleton />
-            </ProductCard>
-          ))
-        : products.map((product: Product) => (
-            <ProductCard key={product.id}>
-              <Card
-                product={product}
-                onClick={() => onProductClick(product.id)}
-                onAddToCart={onAddToCart}
-              />
-            </ProductCard>
-          ))}
-    </ProductGridStyle>
+    <Container>
+      <ProductGridStyle maxWidth="100%">
+        {isLoading
+          ? Array.from({ length: 30 }).map((_, index) => (
+              <ProductCard key={index}>
+                <AllProductsSkeleton />
+              </ProductCard>
+            ))
+          : products.map((product: Product) => (
+              <ProductCard key={product.id}>
+                <Card
+                  product={product}
+                  onClick={() => onProductClick(product.id)}
+                  onAddToCart={onAddToCart}
+                />
+              </ProductCard>
+            ))}
+      </ProductGridStyle>
+    </Container>
   )
 }
 
-export const ProductGridStyle = styled.div`
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+`
+
+const ProductGridStyle = styled.div<{ maxWidth: string }>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
+  margin-top: 40px;
+  justify-content: center;
+
+  max-width: ${({ maxWidth }) => maxWidth};
 
   @media (max-width: 600px) {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
     padding: 1rem;
   }
 `
 
 export const ProductCard = styled.div`
-  flex: 1 1 320px;
   box-sizing: border-box;
   padding: 0.75rem;
   background: ${({ theme }) => theme.bg};
