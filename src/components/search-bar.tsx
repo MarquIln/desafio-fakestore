@@ -17,25 +17,20 @@ export const SearchBar = ({ keyword, onKeywordChange }: SearchBarProps) => {
   }
 
   return (
-    <StyledSearchBar>
-      <FaSearch style={{ marginRight: '10px', color: '#fd3a3a' }} />
-      <input
+    <SearchBarContainer>
+      <FaSearch color="#fd3a3a" />
+      <SearchInput
         type="text"
         placeholder="Search for products"
         value={keyword}
         onChange={handleChange}
       />
-      {keyword && (
-        <FaTimes
-          onClick={handleClear}
-          style={{ cursor: 'pointer', color: '#fd3a3a' }}
-        />
-      )}
-    </StyledSearchBar>
+      {keyword && <ClearIcon color="#fd3a3a" onClick={handleClear} />}
+    </SearchBarContainer>
   )
 }
 
-const StyledSearchBar = styled.div`
+const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: #e9e9e9;
@@ -44,36 +39,30 @@ const StyledSearchBar = styled.div`
   width: 500px;
   position: relative;
 
-  input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: none;
-    color: black;
-    padding-left: 40px;
-    padding-right: 30px;
-    font-size: 16px;
-  }
-
   @media (max-width: 769px) {
     width: 100%;
   }
+`
 
-  input::placeholder {
+const ClearIcon = styled(FaTimes)`
+  cursor: pointer;
+  color: '#fd3a3a';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+`
+
+const SearchInput = styled.input`
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  color: black;
+  padding-left: 10px;
+  font-size: 16px;
+
+  ::placeholder {
     color: gray;
-  }
-
-  svg {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  svg:first-of-type {
-    left: 10px;
-  }
-
-  svg:last-of-type {
-    right: 10px;
   }
 `
