@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useCartStore } from '@/context/cart-store'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { FaCartShopping } from 'react-icons/fa6'
 import styled from 'styled-components'
-import { SearchBar } from './search-bar'
 import { Filter } from './filter'
-import { useCartStore } from '@/context/cart-store'
+import { SearchBar } from './search-bar'
 import { Sidebar } from './sidebar'
-import { ChangeTheme } from './change-theme'
 
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
@@ -64,7 +63,6 @@ export const Header = ({
           </FiltersDesktop>
         </ContentWrapper>
         <RightSection>
-          <ChangeTheme />
           <Cart onClick={() => router.push('/cart')}>
             <FaCartShopping color="#fd3a3a" size={30} />
             {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}
@@ -85,6 +83,12 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
 `
 
 const Logo = styled.p`
@@ -92,6 +96,23 @@ const Logo = styled.p`
   font-weight: bold;
   cursor: pointer;
   color: #fd3a3a;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    flex: 1;
+  }
+`
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex: none;
+  }
 `
 
 const Cart = styled.div`
@@ -126,13 +147,6 @@ const FiltersDesktop = styled.div`
   @media (min-width: 769px) {
     display: flex;
   }
-`
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  gap: 20px;
 `
 
 const RightSection = styled.div`
