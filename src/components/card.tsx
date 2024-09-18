@@ -36,8 +36,9 @@ export const Card = ({ product, onClick, onAddToCart }: CardProps) => {
         <Image
           src={product.image}
           alt="imagem do produto"
-          layout="fill"
-          objectFit="cover"
+          layout="cover"
+          width={200}
+          height={200}
         />
       </ImageWrapper>
       <Title>{formattedTitle}</Title>
@@ -72,8 +73,8 @@ const CardContainer = styled.div`
 const ImageWrapper = styled.div`
   position: relative;
   justify-content: center;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 10px;
   overflow: hidden;
   margin-left: 40px;
