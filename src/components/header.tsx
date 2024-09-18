@@ -20,7 +20,7 @@ export const Header = ({
   disableFilters = false,
 }: HeaderProps) => {
   const router = useRouter()
-  const { keyword, setKeyword } = useProductStore()
+  const { keyword, setKeyword, setActivatedCategory } = useProductStore()
   const { cart } = useCartStore()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0)
@@ -50,6 +50,7 @@ export const Header = ({
         <Logo
           onClick={() => {
             setKeyword('')
+            setActivatedCategory('')
             router.push('/')
           }}
         >
@@ -64,7 +65,8 @@ export const Header = ({
             {!disableFilters && (
               <Filter
                 onCategoryChange={(category) => {
-                  if (onCategoryChange) onCategoryChange(category)
+                  setActivatedCategory(category)
+                  router.push('/')
                 }}
               />
             )}

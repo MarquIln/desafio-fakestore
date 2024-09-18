@@ -118,8 +118,8 @@ const DropdownContent = styled.div<{ open: boolean }>`
   background-color: white;
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1;
   border-radius: 10px;
+  z-index: 10;
 `
 
 const DropdownItem = styled.div`
@@ -143,6 +143,6 @@ const DropdownReset = styled.div`
   border-radius: 4px;
 
   &:hover {
-    background-color: #fa9797;
+    background-color: #c3c3c3;
   }
 `
