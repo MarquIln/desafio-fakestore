@@ -8,6 +8,7 @@ import { SearchBar } from './search-bar'
 import { Filter } from './filter'
 import { useCartStore } from '@/context/cart-store'
 import { Sidebar } from './sidebar'
+import { ChangeTheme } from './change-theme'
 
 interface HeaderProps {
   onKeywordChange?: (keyword: string) => void
@@ -59,6 +60,7 @@ export const Header = ({
             />
           )}
         </FiltersDesktop>
+        <ChangeTheme />
         <Cart onClick={() => router.push('/cart')}>
           <BsCart />
           {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}

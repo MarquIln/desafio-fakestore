@@ -36,7 +36,6 @@ export const CategoriesSlider = ({
 
   return (
     <SliderContainer>
-      <SliderTitle>Categorias</SliderTitle>
       <Slider>
         {categories.map((category) => (
           <Category
@@ -53,12 +52,7 @@ export const CategoriesSlider = ({
 }
 
 const SliderContainer = styled.div`
-  padding: 0rem 1rem 0rem 1rem;
-`
-
-const SliderTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
+  padding: 1rem 1rem 0rem 1rem;
 `
 
 const Slider = styled.div`
