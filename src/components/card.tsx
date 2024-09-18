@@ -83,6 +83,10 @@ const CardContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
+
+  @media (max-width: 769px) {
+    margin-left: 20px;
+  }
 `
 
 const ImageWrapper = styled.div`
