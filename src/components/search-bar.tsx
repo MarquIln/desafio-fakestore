@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 import styled from 'styled-components'
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaTimes } from 'react-icons/fa'
 
 interface SearchBarProps {
   keyword: string
@@ -12,15 +12,25 @@ export const SearchBar = ({ keyword, onKeywordChange }: SearchBarProps) => {
     onKeywordChange(e.target.value)
   }
 
+  const handleClear = () => {
+    onKeywordChange('')
+  }
+
   return (
     <StyledSearchBar>
-      <FaSearch style={{ marginRight: '10px', color: 'black' }} />
+      <FaSearch style={{ marginRight: '10px', color: '#fd3a3a' }} />
       <input
         type="text"
         placeholder="Search for products"
         value={keyword}
         onChange={handleChange}
       />
+      {keyword && (
+        <FaTimes
+          onClick={handleClear}
+          style={{ cursor: 'pointer', color: '#fd3a3a' }}
+        />
+      )}
     </StyledSearchBar>
   )
 }
@@ -32,6 +42,7 @@ const StyledSearchBar = styled.div`
   border-radius: 10px;
   padding: 10px 20px;
   width: 500px;
+  position: relative;
 
   input {
     flex: 1;
@@ -39,7 +50,8 @@ const StyledSearchBar = styled.div`
     outline: none;
     background: none;
     color: black;
-    padding-left: 10px;
+    padding-left: 40px;
+    padding-right: 30px;
     font-size: 16px;
   }
 
@@ -49,5 +61,19 @@ const StyledSearchBar = styled.div`
 
   input::placeholder {
     color: gray;
+  }
+
+  svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  svg:first-of-type {
+    left: 10px;
+  }
+
+  svg:last-of-type {
+    right: 10px;
   }
 `
