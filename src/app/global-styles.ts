@@ -39,18 +39,6 @@ const GlobalStyle = createGlobalStyle`
         --font-inter: ${inter.variable};
     }
 
-    [data-theme='dark'] {
-        --bg: #27272a;
-        --fg: #ffffff;
-        --headingcolor: #ffffff;
-        --primary-button-bgcolor: #fd3a3a;
-        --primary-button-hovercolor: #ccc;
-        --primary-button-textcolor: #ffffff;
-        --secondary-button-bgcolor: #333333;
-        --secondary-button-hovercolor: #1a1a1a;
-        --secondary-button-textcolor: #ffffff;
-    }
-
     [data-theme='light'] {
         --bg: #ffffff; 
         --fg: #000000; 
@@ -69,7 +57,6 @@ const GlobalStyle = createGlobalStyle`
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    [data-theme='dark'] [data-hide-on-theme='dark'],
     [data-theme='light'] [data-hide-on-theme='light'] {
         display: none;
     }
