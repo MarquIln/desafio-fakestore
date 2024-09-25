@@ -89,7 +89,7 @@ const ProductCard = styled.div`
 const NoProductsMessage = styled.div`
   grid-column: 1 / -1;
   text-align: center;
-  padding: 50px 20px;
+  padding: 100px 20px;
   color: #000;
   font-size: 1.5rem;
 `

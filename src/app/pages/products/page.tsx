@@ -12,7 +12,7 @@ import {
   fetchAllProducts,
   fetchProductByCategory,
   fetchProductsByPage,
-} from '@/services/api'
+} from '@/services/product-api'
 import type { Product } from '@/types/product'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -89,7 +89,7 @@ export default function AllProductsPage() {
   }
 
   const goToProductPage = (id: number) => {
-    router.push(`/products/${id}`)
+    router.push(`/pages/products/${id}`)
     setActivatedCategory('')
     setKeyword('')
   }

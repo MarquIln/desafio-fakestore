@@ -73,7 +73,7 @@ export const Header = ({
           </FiltersDesktop>
         </ContentWrapper>
         <RightSection>
-          <Cart onClick={() => router.push('/cart')}>
+          <Cart onClick={() => router.push('/pages/cart')}>
             <FaCartShopping color="#fd3a3a" size={30} />
             {totalQuantity > 0 && <CartQuantity>{totalQuantity}</CartQuantity>}
           </Cart>

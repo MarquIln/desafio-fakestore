@@ -1,4 +1,4 @@
-html.light {
+html {
   --background-color: #ffffff;
   --text-color: #000000;
   --gray-rgb: 0, 0, 0;
@@ -6,16 +6,6 @@ html.light {
   --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
-}
-
-html.dark {
-  --background-color: #000000;
-  --text-color: #ffffff;
-  --gray-rgb: 255, 255, 255;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-  --button-primary-hover: #ccc;
-  --button-secondary-hover: #1a1a1a;
 }
 
 body {
