@@ -2,10 +2,12 @@
 
 import { useCartStore } from '@/context/cart-store'
 import { useEffect, useState } from 'react'
-import AllProductsPage from './products/page'
 import { Spinner } from '@/components/spinner'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
+
   const loadCartFromLocalStorage = useCartStore(
     (state) => state.loadCartFromLocalStorage,
   )
@@ -34,5 +36,5 @@ export default function Home() {
     )
   }
 
-  return <AllProductsPage />
+  router.push('/pages/products')
 }

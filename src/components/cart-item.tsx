@@ -77,16 +77,14 @@ export const CartItem = ({ product, quantity, onRemove }: CartItemProps) => {
   )
 }
 
-const CartWrapper = styled.div<{ theme: 'dark' | 'light' }>`
+const CartWrapper = styled.div`
   max-width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  background: ${({ theme }) => theme.bg};
+  background: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 12px
-    ${({ theme }) =>
-      theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
-  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #333;
   box-sizing: border-box;
   overflow-x: auto;
 `
@@ -95,7 +93,7 @@ const CartItemWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.bg};
+  background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -133,10 +131,10 @@ const ProductInfo = styled.div`
   }
 `
 
-const ProductTitle = styled.h2<{ theme: 'dark' | 'light' }>`
+const ProductTitle = styled.h2`
   margin: 0;
   font-size: 1.2rem;
-  color: ${({ theme }) => (theme === 'dark' ? '#fff' : '#333')};
+  color: #333;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -153,40 +151,40 @@ const PriceWrapper = styled.div`
   margin: 1rem 0;
 `
 
-const ProductPrice = styled.div<{ theme: 'dark' | 'light' }>`
+const ProductPrice = styled.div`
   font-size: 1rem;
-  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#333')};
+  color: #333;
 `
 
 const BoldPrice = styled.span`
   font-weight: bold;
 `
 
-const OriginalPrice = styled.span<{ theme: 'dark' | 'light' }>`
+const OriginalPrice = styled.span`
   text-decoration: line-through;
-  color: ${({ theme }) => (theme === 'dark' ? '#888' : '#888')};
+  color: #888;
 `
 
-const PriceWithDiscount = styled.span<{ theme: 'dark' | 'light' }>`
-  color: ${({ theme }) => (theme === 'dark' ? '#fd3a3a' : '#fd3a3a')};
+const PriceWithDiscount = styled.span`
+  color: #fd3a3a;
   font-weight: bold;
   margin-left: 0.5rem;
 `
 
-const ProductQuantity = styled.p<{ theme: 'dark' | 'light' }>`
+const ProductQuantity = styled.p`
   font-size: 1rem;
-  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#333')};
+  color: #333;
 `
 
-const RemoveButton = styled.button<{ theme: 'dark' | 'light' }>`
+const RemoveButton = styled.button`
   background: none;
   border: none;
-  color: ${({ theme }) => (theme === 'dark' ? '#fd3a3a' : '#fd3a3a')};
+  color: #fd3a3a;
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.3s;
 
   &:hover {
-    color: ${({ theme }) => (theme === 'dark' ? '#c9302c' : '#c9302c')};
+    color: #c9302c;
   }
 `

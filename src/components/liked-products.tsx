@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useFormatTitle } from '@/hooks/use-format-title'
-import { fetchProductByCategory } from '@/services/api'
+import { fetchProductByCategory } from '@/services/product-api'
 import type { Product } from '@/types/product'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -37,7 +37,7 @@ export const LikedProducts = ({ product }: LikedProductsProps) => {
   }
 
   const goToProductPage = (id: number) => {
-    router.push(`/products/${id}`)
+    router.push(`/pages/products/${id}`)
   }
 
   return (

@@ -1,11 +1,12 @@
 import { useCartStore } from '@/context/cart-store'
-import styled from 'styled-components'
+import type { ReactNode } from 'react'
+import styled, { keyframes } from 'styled-components'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
   title: string
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
@@ -33,6 +34,18 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   )
 }
 
+// Adicionando animação de fade-in
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`
+
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -44,38 +57,40 @@ const ModalOverlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: ${fadeIn} 0.3s ease-out;
 `
 
 const ModalContent = styled.div`
   background: #ffffff;
   color: #333333;
-  padding: 30px;
-  border-radius: 8px;
-  max-width: 500px;
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 550px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  animation: ${fadeIn} 0.3s ease-out;
 `
 
 const ModalTitle = styled.h2`
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 25px;
   font-weight: bold;
 `
 
 const ModalBody = styled.div`
   font-size: 1.2rem;
-  margin-bottom: 30px;
-  line-height: 1.5;
+  margin-bottom: 35px;
+  line-height: 1.6;
 `
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
 `
 
 const CloseButton = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #d9534f;
   color: #ffffff;
   border: none;
@@ -90,7 +105,7 @@ const CloseButton = styled.button`
 `
 
 const ConfirmPurchaseButton = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #28a745;
   color: #ffffff;
   border: none;
@@ -98,7 +113,6 @@ const ConfirmPurchaseButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-left: 10px;
 
   &:hover {
     background-color: #218838;

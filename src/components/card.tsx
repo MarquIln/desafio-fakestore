@@ -105,7 +105,6 @@ const ImageWrapper = styled.div`
 
 const Title = styled.h2`
   font-size: 1rem;
-  color: var(--headingcolor);
 `
 
 const Description = styled.p`

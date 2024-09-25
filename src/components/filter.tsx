@@ -1,5 +1,5 @@
 import { useProductStore } from '@/context/product-store'
-import { fetchAllCategories } from '@/services/api'
+import { fetchAllCategories } from '@/services/product-api'
 import { useEffect, useRef, useState } from 'react'
 import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'

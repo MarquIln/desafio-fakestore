@@ -1,5 +1,5 @@
 import { useProductStore } from '@/context/product-store'
-import { fetchAllCategories } from '@/services/api'
+import { fetchAllCategories } from '@/services/product-api'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
