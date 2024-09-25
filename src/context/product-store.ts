@@ -1,4 +1,4 @@
-import { fetchProductById, fetchProductsByPage } from '@/services/api'
+import { fetchProductById, fetchProductsByPage } from '@/services/product-api'
 import { Product } from '@/types/product'
 import { create } from 'zustand'
 
