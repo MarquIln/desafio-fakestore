@@ -2,7 +2,6 @@
 
 import { Header } from '@/components/header'
 import { LikedProducts } from '@/components/liked-products'
-import { ProductPageSkeleton } from '@/components/product-page-skeleton'
 import { useCartStore } from '@/context/cart-store'
 import { useProductStore } from '@/context/product-store'
 import type { Product } from '@/types/product'
@@ -12,8 +11,12 @@ import { PopUp } from '@/components/pop-up'
 import { ProductDetails } from '@/components/product-details'
 import { CategoriesSlider } from '@/components/categories-slider'
 import { useRouter } from 'next/navigation'
+import { ProductPageSkeleton } from '@/components/product-page-skeleton'
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
+  const [loading, setLoading] = useState(true)
+  const [showPopUp, setShowPopUp] = useState(false)
+
   const { product, fetchProductById, setKeyword, setActivatedCategory } =
     useProductStore((state) => state)
   const { addToCart } = useCartStore((state) => ({
@@ -22,15 +25,11 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
   const router = useRouter()
 
-  const [loading, setLoading] = useState(true)
-  const [showPopUp, setShowPopUp] = useState(false)
-
   useEffect(() => {
     const id = parseInt(params.id)
     if (id) {
       setLoading(true)
-      fetchProductById(id)
-      setLoading(false)
+      fetchProductById(id).finally(() => setLoading(false))
     }
   }, [params.id, fetchProductById])
 

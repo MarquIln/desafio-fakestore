@@ -16,7 +16,6 @@ export const ProductDetails = ({ product, addToCart }: ProductDetailsProps) => {
 
   const handleAddToCart = () => {
     const priceToUse = discountedPrice || product.price
-
     addToCart(product, priceToUse)
   }
 
@@ -41,7 +40,7 @@ export const ProductDetails = ({ product, addToCart }: ProductDetailsProps) => {
           <Category>
             Categoria: <strong>{product.category}</strong>
           </Category>
-          {product.discount !== null ? (
+          {discountedPrice !== null && product.discount ? (
             <DiscountContainer>
               <OriginalPrice>{`$ ${product.price.toFixed(2)}`}</OriginalPrice>
               <DiscountedPrice>{`$ ${discountedPrice.toFixed(2)}`}</DiscountedPrice>
@@ -108,7 +107,7 @@ const ImageWrapper = styled.div`
 const Price = styled.p`
   font-size: 1.8rem;
   font-weight: bold;
-  color: #fd3a3a;
+  color: black;
   margin-bottom: 15px;
 `
 
