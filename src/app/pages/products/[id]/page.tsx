@@ -27,9 +27,10 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     const id = parseInt(params.id)
-    if (!isNaN(id)) {
+    if (id) {
       setLoading(true)
-      fetchProductById(id).finally(() => setLoading(false))
+      fetchProductById(id)
+      setLoading(false)
     }
   }, [params.id, fetchProductById])
 
@@ -46,7 +47,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         onCategoryChange={(category) => {
           setKeyword('')
           setActivatedCategory(category)
-          router.push('/')
+          router.push('/pages/products')
         }}
       />
       {loading ? (

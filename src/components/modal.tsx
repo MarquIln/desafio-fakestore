@@ -10,11 +10,11 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
-  const { setCart } = useCartStore()
+  const { removeAllProductsFromCart } = useCartStore()
   if (!isOpen) return null
 
   const handleFinishPurchase = () => {
-    setCart([])
+    removeAllProductsFromCart()
     onClose()
   }
 
@@ -34,7 +34,6 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   )
 }
 
-// Adicionando animação de fade-in
 const fadeIn = keyframes`
   from {
     opacity: 0;

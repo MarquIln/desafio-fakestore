@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { useWatch, useFormContext } from 'react-hook-form'
 import { getZipCodeInfo } from '@/services/cep-api'
 import styled from 'styled-components'
@@ -6,31 +6,29 @@ import { ZipCodeInput } from '@/components/zip-code-input'
 import type { Address } from '@/types/address'
 
 export function AddressForm() {
+  const [isAddressLoaded, setIsAddressLoaded] = useState(false)
   const { control, setValue, register, formState } = useFormContext<Address>()
   const { errors } = formState
   const zipCode = useWatch({ control, name: 'zipCode' })
 
-  useEffect(() => {
-    const fetchAddress = async () => {
-      if (zipCode && zipCode.replace(/\D/g, '').length === 8) {
-        try {
-          const addressInfo = await getZipCodeInfo(zipCode)
-          if (addressInfo) {
-            setValue('street', addressInfo.street || '')
-            setValue('neighborhood', addressInfo.neighborhood || '')
-            setValue('city', addressInfo.city || '')
-            setValue('state', addressInfo.state || '')
-          }
-        } catch (error) {
-          console.error('Failed to fetch address:', error)
+  const fetchAddress = useCallback(async () => {
+    if (zipCode && zipCode.replace(/\D/g, '').length === 8) {
+      try {
+        const addressInfo = await getZipCodeInfo(zipCode)
+        setIsAddressLoaded(true)
+        if (addressInfo) {
+          setValue('street', addressInfo.street || '')
+          setValue('neighborhood', addressInfo.neighborhood || '')
+          setValue('city', addressInfo.city || '')
+          setValue('state', addressInfo.state || '')
         }
+      } catch (error) {
+        console.error('Failed to fetch address:', error)
       }
     }
+  }, [zipCode, setIsAddressLoaded, setValue])
 
-    fetchAddress()
-  }, [zipCode, setValue])
-
-  const isAddressLoaded = !!(zipCode && zipCode.replace(/\D/g, '').length === 8)
+  fetchAddress()
 
   return (
     <FormContainer>

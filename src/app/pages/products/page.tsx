@@ -22,11 +22,19 @@ export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [page, setPage] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(true)
-  const { keyword, setKeyword, activatedCategory, setActivatedCategory } =
-    useProductStore((state) => state)
   const [showPopup, setShowPopup] = useState(false)
+
   const router = useRouter()
   const totalPages = 5
+
+  const { keyword, setKeyword, activatedCategory, setActivatedCategory } =
+    useProductStore((state) => ({
+      keyword: state.keyword,
+      setKeyword: state.setKeyword,
+      activatedCategory: state.activatedCategory,
+      setActivatedCategory: state.setActivatedCategory,
+    }))
+
   const { handleScroll } = useScrollToTop(true)
 
   const getProducts = useCallback(async () => {

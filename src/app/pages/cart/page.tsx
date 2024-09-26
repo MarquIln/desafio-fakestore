@@ -33,10 +33,14 @@ export default function CartPage() {
       complement: '',
     },
   })
+  const { watch } = formMethods
 
-  useEffect(() => {
-    loadCartFromLocalStorage()
-  }, [loadCartFromLocalStorage])
+  const zipCode = watch('zipCode')
+  const number = watch('number')
+
+  const isFormValid = useMemo(() => {
+    return zipCode?.replace(/\D/g, '').length === 8 && number?.trim() !== ''
+  }, [zipCode, number])
 
   const totalItems = useMemo(
     () => items.reduce((total, item) => total + (item.quantity || 0), 0),
@@ -58,10 +62,13 @@ export default function CartPage() {
     removeFromCart(productId)
   }
 
-  const handleFinalizePurchase = (data: Address) => {
-    console.log('Finalizing purchase with address:', data)
+  const handleFinalizePurchase = () => {
     setShowModal(true)
   }
+
+  useEffect(() => {
+    loadCartFromLocalStorage()
+  }, [loadCartFromLocalStorage])
 
   return (
     <>
@@ -98,7 +105,7 @@ export default function CartPage() {
                   onSubmit={formMethods.handleSubmit(handleFinalizePurchase)}
                 >
                   <AddressForm />
-                  <FinalizeButton type="submit">
+                  <FinalizeButton type="submit" disabled={!isFormValid}>
                     Finalizar Compra
                   </FinalizeButton>
                 </form>
@@ -149,7 +156,7 @@ const PageWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: column; /* Mudei para coluna */
+  flex-direction: column;
   gap: 2rem;
 `
 
@@ -159,7 +166,7 @@ const CartItemsWrapper = styled.div`
 
 const FormWrapper = styled.div`
   flex: 0 0 300px;
-  margin-top: 2rem; /* Adicionei um espaçamento em cima */
+  margin-top: 2rem;
 `
 
 const Summary = styled.div`
@@ -170,17 +177,17 @@ const SummaryItem = styled.p`
   font-size: 1.25rem;
 `
 
-const FinalizeButton = styled.button`
+const FinalizeButton = styled.button<{ disabled: boolean }>`
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #0070f3;
+  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#fd3a3a')};
   color: white;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
-    background-color: #005bb5;
+    background-color: ${({ disabled }) => (disabled ? '#ccc' : '#c9302c')};
   }
 `
 

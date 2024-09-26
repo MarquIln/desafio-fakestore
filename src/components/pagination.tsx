@@ -14,7 +14,7 @@ const PageIndicator = styled.span<{ isActive?: boolean }>`
   color: ${({ isActive }) => (isActive ? 'white' : '#fd3a3a')};
   background-color: ${({ isActive }) => (isActive ? '#fd3a3a' : 'white')};
   border: 1px solid #fd3a3a;
-  border-radius: 10%;
+  border-radius: 20%;
   padding: 5px;
   cursor: pointer;
 `
