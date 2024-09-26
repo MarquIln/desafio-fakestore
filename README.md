@@ -14,7 +14,7 @@ Siga as instruções abaixo para rodar o projeto localmente.
 
 Pré-requisitos
 
-  -> Node.js (versão 14 ou superior)
+  -> Node.js
   -> npm
 
 
@@ -42,7 +42,7 @@ O que voce verá nesse projeto:
   -> Remoção de Produtos: Remova itens do carrinho com uma animação suave.
 
 
-📂 Estrutura do Projeto
+Estrutura do Projeto
 
   -> app/: Contém as páginas da aplicação.
   
@@ -57,6 +57,6 @@ O que voce verá nesse projeto:
   -> types/: Tipagens da aplicação
 
 
-📄 Documentação Adicional
+Documentação Adicional
   -> Para mais detalhes sobre o Next.js, consulte a documentação oficial.
 
